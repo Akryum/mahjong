@@ -14,8 +14,10 @@
 	
 	<!-- classpath, haxe libs -->
 	<source path="src" />
+	<source path="fonts" />
 	<haxelib name="openfl" />
 	<haxelib name="actuate" />
+	<haxelib name="tjson" />
 	
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />

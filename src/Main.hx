@@ -1,5 +1,6 @@
 package ;
 
+import com.App;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
@@ -26,13 +27,8 @@ class Main extends Sprite
 		if (inited) return;
 		inited = true;
 
-		// (your code here)
-		
-		// Stage:
-		// stage.stageWidth x stage.stageHeight @ stage.dpiScale
-		
-		// Assets:
-		// nme.Assets.getBitmapData("img/assetname.jpg");
+		var app:App = new App();
+		addChild(app);
 	}
 
 	/* SETUP */

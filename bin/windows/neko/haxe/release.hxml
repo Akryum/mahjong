@@ -1,0 +1,16 @@
+-main ApplicationMain 
+-lib openfl
+-lib openfl-native
+-lib actuate
+-lib tjson
+-cp src
+-cp fonts
+-D no_console=1
+-D tools=1
+-D openfl_ver=1.0.6
+-D openfl
+-D windows
+-D desktop
+-cp bin/windows/neko/haxe
+-neko bin/windows/neko/obj/ApplicationMain.n
+--macro allowPackage("flash")
