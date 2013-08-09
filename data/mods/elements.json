@@ -1,0 +1,1163 @@
+{
+  "name" : "Éléments",
+  "author" : "pierre_24",
+  "rules" : "Associez symbole chimique au nom qui lui est équivalent ! Cette version reprend les 72 symboles chimiques reconnus pour être les plus courants, il s'agit donc de la version facile.",
+  
+  "pieces": [
+        {
+            "name": "H_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){H}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 1."
+        },
+        {
+            "name": "H_t",
+            "type": "text",
+            "value": "\\color(red){Hydro-\\ngène}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 1.01 g mol⁻¹, dont la température d'ébulition est de 20.2 K et celle de fusion de 14 K."
+        },
+        {
+            "name": "He_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){He}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 2."
+        },
+        {
+            "name": "He_t",
+            "type": "text",
+            "value": "\\color(red){Hélium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 4 g mol⁻¹, dont la température d'ébulition est de 4.2 K et celle de fusion de 0.9 K."
+        },
+        {
+            "name": "Li_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Li}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 3."
+        },
+        {
+            "name": "Li_t",
+            "type": "text",
+            "value": "\\color(red){Lithium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 6.94 g mol⁻¹, dont la température d'ébulition est de 1590.1 K et celle de fusion de 453.6 K."
+        },
+        {
+            "name": "Be_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Be}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 4."
+        },
+        {
+            "name": "Be_t",
+            "type": "text",
+            "value": "\\color(red){Béryllium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 9.01 g mol⁻¹, dont la température d'ébulition est de 3243.1 K et celle de fusion de 1551.1 K."
+        },
+        {
+            "name": "B_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){B}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 5."
+        },
+        {
+            "name": "B_t",
+            "type": "text",
+            "value": "\\color(red){Bore}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 10.81 g mol⁻¹, dont la température d'ébulition est de 2823.1 K et celle de fusion de 2573.1 K."
+        },
+        {
+            "name": "C_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){C}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 6."
+        },
+        {
+            "name": "C_t",
+            "type": "text",
+            "value": "\\color(red){Carbone}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 12.01 g mol⁻¹, dont la température d'ébulition est de 5100.1 K et celle de fusion de 3823.1 K."
+        },
+        {
+            "name": "N_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){N}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 7."
+        },
+        {
+            "name": "N_t",
+            "type": "text",
+            "value": "\\color(red){Azote}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 14.01 g mol⁻¹, dont la température d'ébulition est de 77.3 K et celle de fusion de 63.2 K."
+        },
+        {
+            "name": "O_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){O}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 8."
+        },
+        {
+            "name": "O_t",
+            "type": "text",
+            "value": "\\color(red){Oxygène}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 16 g mol⁻¹, dont la température d'ébulition est de 90.2 K et celle de fusion de 54.7 K."
+        },
+        {
+            "name": "F_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){F}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 9."
+        },
+        {
+            "name": "F_t",
+            "type": "text",
+            "value": "\\color(red){Fluor}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 19 g mol⁻¹, dont la température d'ébulition est de 85 K et celle de fusion de 53.5 K."
+        },
+        {
+            "name": "Ne_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ne}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 10."
+        },
+        {
+            "name": "Ne_t",
+            "type": "text",
+            "value": "\\color(red){Néon}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 20.18 g mol⁻¹, dont la température d'ébulition est de 27 K et celle de fusion de 24.4 K."
+        },
+        {
+            "name": "Na_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Na}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 11."
+        },
+        {
+            "name": "Na_t",
+            "type": "text",
+            "value": "\\color(red){Sodium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 22.99 g mol⁻¹, dont la température d'ébulition est de 1165.1 K et celle de fusion de 370.9 K."
+        },
+        {
+            "name": "Mg_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Mg}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 12."
+        },
+        {
+            "name": "Mg_t",
+            "type": "text",
+            "value": "\\color(red){Magné-\nsium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 24.31 g mol⁻¹, dont la température d'ébulition est de 1380.1 K et celle de fusion de 921.9 K."
+        },
+        {
+            "name": "Al_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Al}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 13."
+        },
+        {
+            "name": "Al_t",
+            "type": "text",
+            "value": "\\color(red){Aluminium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 26.98 g mol⁻¹, dont la température d'ébulition est de 2740.1 K et celle de fusion de 933.6 K."
+        },
+        {
+            "name": "Si_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Si}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 14."
+        },
+        {
+            "name": "Si_t",
+            "type": "text",
+            "value": "\\color(red){Silicium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 28.09 g mol⁻¹, dont la température d'ébulition est de 2628.1 K et celle de fusion de 1683.1 K."
+        },
+        {
+            "name": "P_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){P}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 15."
+        },
+        {
+            "name": "P_t",
+            "type": "text",
+            "value": "\\color(red){Phosphore}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 30.97 g mol⁻¹, dont la température d'ébulition est de 553.1 K et celle de fusion de 317.1 K."
+        },
+        {
+            "name": "S_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){S}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 16."
+        },
+        {
+            "name": "S_t",
+            "type": "text",
+            "value": "\\color(red){Soufre}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 32.07 g mol⁻¹, dont la température d'ébulition est de 717.8 K et celle de fusion de 386.1 K."
+        },
+        {
+            "name": "Cl_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Cl}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 17."
+        },
+        {
+            "name": "Cl_t",
+            "type": "text",
+            "value": "\\color(red){Chlore}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 35.45 g mol⁻¹, dont la température d'ébulition est de 238.5 K et celle de fusion de 172.1 K."
+        },
+        {
+            "name": "Ar_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ar}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 18."
+        },
+        {
+            "name": "Ar_t",
+            "type": "text",
+            "value": "\\color(red){Argon}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 39.95 g mol⁻¹, dont la température d'ébulition est de 87.2 K et celle de fusion de 83.7 K."
+        },
+        {
+            "name": "K_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){K}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 19."
+        },
+        {
+            "name": "K_t",
+            "type": "text",
+            "value": "\\color(red){Potas-\nsium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 39.1 g mol⁻¹, dont la température d'ébulition est de 1047.1 K et celle de fusion de 336.8 K."
+        },
+        {
+            "name": "Ca_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ca}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 20."
+        },
+        {
+            "name": "Ca_t",
+            "type": "text",
+            "value": "\\color(red){Calcium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 40.08 g mol⁻¹, dont la température d'ébulition est de 1760.1 K et celle de fusion de 1112.1 K."
+        },
+        {
+            "name": "Ti_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ti}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 22."
+        },
+        {
+            "name": "Ti_t",
+            "type": "text",
+            "value": "\\color(red){Titane}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 47.88 g mol⁻¹, dont la température d'ébulition est de 3533.1 K et celle de fusion de 1933.1 K."
+        },
+        {
+            "name": "V_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){V}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 23."
+        },
+        {
+            "name": "V_t",
+            "type": "text",
+            "value": "\\color(red){Vanadium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 50.94 g mol⁻¹, dont la température d'ébulition est de 3653.1 K et celle de fusion de 2163.1 K."
+        },
+        {
+            "name": "Cr_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Cr}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 24."
+        },
+        {
+            "name": "Cr_t",
+            "type": "text",
+            "value": "\\color(red){Chrome}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 52 g mol⁻¹, dont la température d'ébulition est de 2755.1 K et celle de fusion de 2130.1 K."
+        },
+        {
+            "name": "Mn_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Mn}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 25."
+        },
+        {
+            "name": "Mn_t",
+            "type": "text",
+            "value": "\\color(red){Manga-\\nnèse}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 54.94 g mol⁻¹, dont la température d'ébulition est de 2370.1 K et celle de fusion de 1517.1 K."
+        },
+        {
+            "name": "Fe_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Fe}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 26."
+        },
+        {
+            "name": "Fe_t",
+            "type": "text",
+            "value": "\\color(red){Fer}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 55.85 g mol⁻¹, dont la température d'ébulition est de 3023.1 K et celle de fusion de 1808.1 K."
+        },
+        {
+            "name": "Co_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Co}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 27."
+        },
+        {
+            "name": "Co_t",
+            "type": "text",
+            "value": "\\color(red){Cobalt}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 58.93 g mol⁻¹, dont la température d'ébulition est de 3143.1 K et celle de fusion de 1768.1 K."
+        },
+        {
+            "name": "Ni_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ni}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 28."
+        },
+        {
+            "name": "Ni_t",
+            "type": "text",
+            "value": "\\color(red){Nickel}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 58.69 g mol⁻¹, dont la température d'ébulition est de 3005.1 K et celle de fusion de 1726.1 K."
+        },
+        {
+            "name": "Cu_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Cu}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 29."
+        },
+        {
+            "name": "Cu_t",
+            "type": "text",
+            "value": "\\color(red){Cuivre}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 63.55 g mol⁻¹, dont la température d'ébulition est de 2868.1 K et celle de fusion de 1356.6 K."
+        },
+        {
+            "name": "Zn_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Zn}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 30."
+        },
+        {
+            "name": "Zn_t",
+            "type": "text",
+            "value": "\\color(red){Zinc}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 65.39 g mol⁻¹, dont la température d'ébulition est de 1180.1 K et celle de fusion de 692.7 K."
+        },
+        {
+            "name": "Ga_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ga}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 31."
+        },
+        {
+            "name": "Ga_t",
+            "type": "text",
+            "value": "\\color(red){Gallium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 69.72 g mol⁻¹, dont la température d'ébulition est de 2676.1 K et celle de fusion de 302.9 K."
+        },
+        {
+            "name": "Ge_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ge}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 32."
+        },
+        {
+            "name": "Ge_t",
+            "type": "text",
+            "value": "\\color(red){Germa-\\nnium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 72.61 g mol⁻¹, dont la température d'ébulition est de 3103.1 K et celle de fusion de 1210.5 K."
+        },
+        {
+            "name": "As_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){As}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 33."
+        },
+        {
+            "name": "As_t",
+            "type": "text",
+            "value": "\\color(red){Arsenic}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 74.92 g mol⁻¹, dont la température d'ébulition est de 273.1 K et celle de fusion de 886.1 K."
+        },
+        {
+            "name": "Se_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Se}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 34."
+        },
+        {
+            "name": "Se_t",
+            "type": "text",
+            "value": "\\color(red){Sélénium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 78.96 g mol⁻¹, dont la température d'ébulition est de 958.1 K et celle de fusion de 490.1 K."
+        },
+        {
+            "name": "Br_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Br}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 35."
+        },
+        {
+            "name": "Br_t",
+            "type": "text",
+            "value": "\\color(red){Brome}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 79.9 g mol⁻¹, dont la température d'ébulition est de 331.9 K et celle de fusion de 265.8 K."
+        },
+        {
+            "name": "Kr_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Kr}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 36."
+        },
+        {
+            "name": "Kr_t",
+            "type": "text",
+            "value": "\\color(red){Krypton}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 83.8 g mol⁻¹, dont la température d'ébulition est de 120.8 K et celle de fusion de 116.5 K."
+        },
+        {
+            "name": "Rb_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Rb}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 37."
+        },
+        {
+            "name": "Rb_t",
+            "type": "text",
+            "value": "\\color(red){Rubidium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 85.47 g mol⁻¹, dont la température d'ébulition est de 961.1 K et celle de fusion de 312.1 K."
+        },
+        {
+            "name": "Sr_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Sr}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 38."
+        },
+        {
+            "name": "Sr_t",
+            "type": "text",
+            "value": "\\color(red){Strontium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 87.62 g mol⁻¹, dont la température d'ébulition est de 1657.1 K et celle de fusion de 1042.1 K."
+        },
+        {
+            "name": "Y_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Y}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 39."
+        },
+        {
+            "name": "Y_t",
+            "type": "text",
+            "value": "\\color(red){Yttrium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 88.91 g mol⁻¹, dont la température d'ébulition est de 3610.1 K et celle de fusion de 1796.1 K."
+        },
+        {
+            "name": "Zr_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Zr}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 40."
+        },
+        {
+            "name": "Zr_t",
+            "type": "text",
+            "value": "\\color(red){Zirconium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 91.22 g mol⁻¹, dont la température d'ébulition est de 4650.1 K et celle de fusion de 2125.1 K."
+        },
+        {
+            "name": "Mo_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Mo}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 42."
+        },
+        {
+            "name": "Mo_t",
+            "type": "text",
+            "value": "\\color(red){Molyb-\ndène}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 95.94 g mol⁻¹, dont la température d'ébulition est de 5833.1 K et celle de fusion de 2890.1 K."
+        },
+        {
+            "name": "Rh_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Rh}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 45."
+        },
+        {
+            "name": "Rh_t",
+            "type": "text",
+            "value": "\\color(red){Rhodium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 102.91 g mol⁻¹, dont la température d'ébulition est de 4000.1 K et celle de fusion de 2239.1 K."
+        },
+        {
+            "name": "Pd_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Pd}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 46."
+        },
+        {
+            "name": "Pd_t",
+            "type": "text",
+            "value": "\\color(red){Palladium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 106.42 g mol⁻¹, dont la température d'ébulition est de 3413.1 K et celle de fusion de 1825.1 K."
+        },
+        {
+            "name": "Ag_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ag}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 47."
+        },
+        {
+            "name": "Ag_t",
+            "type": "text",
+            "value": "\\color(red){Argent}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 107.87 g mol⁻¹, dont la température d'ébulition est de 2485.1 K et celle de fusion de 1235 K."
+        },
+        {
+            "name": "Cd_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Cd}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 48."
+        },
+        {
+            "name": "Cd_t",
+            "type": "text",
+            "value": "\\color(red){Cadmium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 112.41 g mol⁻¹, dont la température d'ébulition est de 1038.1 K et celle de fusion de 594.1 K."
+        },
+        {
+            "name": "In_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){In}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 49."
+        },
+        {
+            "name": "In_t",
+            "type": "text",
+            "value": "\\color(red){Indium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 114.82 g mol⁻¹, dont la température d'ébulition est de 2353.1 K et celle de fusion de 429.3 K."
+        },
+        {
+            "name": "Sn_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Sn}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 50."
+        },
+        {
+            "name": "Sn_t",
+            "type": "text",
+            "value": "\\color(red){Étain}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 118.71 g mol⁻¹, dont la température d'ébulition est de 2543.1 K et celle de fusion de 505.1 K."
+        },
+        {
+            "name": "Sb_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Sb}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 51."
+        },
+        {
+            "name": "Sb_t",
+            "type": "text",
+            "value": "\\color(red){Antimoine}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 121.75 g mol⁻¹, dont la température d'ébulition est de 2023.1 K et celle de fusion de 903.8 K."
+        },
+        {
+            "name": "Te_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Te}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 52."
+        },
+        {
+            "name": "Te_t",
+            "type": "text",
+            "value": "\\color(red){Tellure}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 127.6 g mol⁻¹, dont la température d'ébulition est de 1263.1 K et celle de fusion de 722.7 K."
+        },
+        {
+            "name": "I_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){I}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 53."
+        },
+        {
+            "name": "I_t",
+            "type": "text",
+            "value": "\\color(red){Iode}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 126.9 g mol⁻¹, dont la température d'ébulition est de 457.5 K et celle de fusion de 386.6 K."
+        },
+        {
+            "name": "Xe_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Xe}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 54."
+        },
+        {
+            "name": "Xe_t",
+            "type": "text",
+            "value": "\\color(red){Xénon}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 131.29 g mol⁻¹, dont la température d'ébulition est de 166.1 K et celle de fusion de 161.2 K."
+        },
+        {
+            "name": "Cs_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Cs}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 55."
+        },
+        {
+            "name": "Cs_t",
+            "type": "text",
+            "value": "\\color(red){Césium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 132.91 g mol⁻¹, dont la température d'ébulition est de 963.1 K et celle de fusion de 301.5 K."
+        },
+        {
+            "name": "Ba_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ba}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 56."
+        },
+        {
+            "name": "Ba_t",
+            "type": "text",
+            "value": "\\color(red){Baryum}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 137.33 g mol⁻¹, dont la température d'ébulition est de 1913.1 K et celle de fusion de 998.1 K."
+        },
+        {
+            "name": "Ce_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ce}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 58."
+        },
+        {
+            "name": "Ce_t",
+            "type": "text",
+            "value": "\\color(red){Cérium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 140.12 g mol⁻¹, dont la température d'ébulition est de 3530.1 K et celle de fusion de 1071.1 K."
+        },
+        {
+            "name": "Eu_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Eu}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 63."
+        },
+        {
+            "name": "Eu_t",
+            "type": "text",
+            "value": "\\color(red){Europium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 151.97 g mol⁻¹, dont la température d'ébulition est de 1870.1 K et celle de fusion de 1095.1 K."
+        },
+        {
+            "name": "Hf_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Hf}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 72."
+        },
+        {
+            "name": "Hf_t",
+            "type": "text",
+            "value": "\\color(red){Hafnium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 178.49 g mol⁻¹, dont la température d'ébulition est de 5673.1 K et celle de fusion de 2423.1 K."
+        },
+        {
+            "name": "Ta_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ta}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 73."
+        },
+        {
+            "name": "Ta_t",
+            "type": "text",
+            "value": "\\color(red){Tantale}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 180.95 g mol⁻¹, dont la température d'ébulition est de 5698.1 K et celle de fusion de 3269.1 K."
+        },
+        {
+            "name": "W_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){W}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 74."
+        },
+        {
+            "name": "W_t",
+            "type": "text",
+            "value": "\\color(red){Tungstène}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 183.85 g mol⁻¹, dont la température d'ébulition est de 6200.1 K et celle de fusion de 3680.1 K."
+        },
+        {
+            "name": "Re_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Re}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 75."
+        },
+        {
+            "name": "Re_t",
+            "type": "text",
+            "value": "\\color(red){Rhénium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 186.21 g mol⁻¹, dont la température d'ébulition est de 5900.1 K et celle de fusion de 3453.1 K."
+        },
+        {
+            "name": "Os_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Os}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 76."
+        },
+        {
+            "name": "Os_t",
+            "type": "text",
+            "value": "\\color(red){Osmium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 190.2 g mol⁻¹, dont la température d'ébulition est de 5300.1 K et celle de fusion de 3318.1 K."
+        },
+        {
+            "name": "Ir_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ir}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 77."
+        },
+        {
+            "name": "Ir_t",
+            "type": "text",
+            "value": "\\color(red){Iridium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 192.22 g mol⁻¹, dont la température d'ébulition est de 4403.1 K et celle de fusion de 2683.1 K."
+        },
+        {
+            "name": "Pt_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Pt}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 78."
+        },
+        {
+            "name": "Pt_t",
+            "type": "text",
+            "value": "\\color(red){Platine}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 195.08 g mol⁻¹, dont la température d'ébulition est de 4100.1 K et celle de fusion de 2045.1 K."
+        },
+        {
+            "name": "Au_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Au}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 79."
+        },
+        {
+            "name": "Au_t",
+            "type": "text",
+            "value": "\\color(red){Or}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 196.97 g mol⁻¹, dont la température d'ébulition est de 3213.1 K et celle de fusion de 1337.5 K."
+        },
+        {
+            "name": "Hg_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Hg}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 80."
+        },
+        {
+            "name": "Hg_t",
+            "type": "text",
+            "value": "\\color(red){Mercure}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 200.59 g mol⁻¹, dont la température d'ébulition est de 629.7 K et celle de fusion de 234.2 K."
+        },
+        {
+            "name": "Tl_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Tl}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 81."
+        },
+        {
+            "name": "Tl_t",
+            "type": "text",
+            "value": "\\color(red){Thallium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 204.38 g mol⁻¹, dont la température d'ébulition est de 1730.1 K et celle de fusion de 576.7 K."
+        },
+        {
+            "name": "Pb_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Pb}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 82."
+        },
+        {
+            "name": "Pb_t",
+            "type": "text",
+            "value": "\\color(red){Plomb}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 207.2 g mol⁻¹, dont la température d'ébulition est de 2013.1 K et celle de fusion de 600.6 K."
+        },
+        {
+            "name": "Bi_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Bi}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 83."
+        },
+        {
+            "name": "Bi_t",
+            "type": "text",
+            "value": "\\color(red){Bismuth}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 208.98 g mol⁻¹, dont la température d'ébulition est de 1833.1 K et celle de fusion de 544.5 K."
+        },
+        {
+            "name": "Po_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Po}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 84."
+        },
+        {
+            "name": "Po_t",
+            "type": "text",
+            "value": "\\color(red){Polonium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 208.98 g mol⁻¹, dont la température d'ébulition est de 1235.1 K et celle de fusion de 527.1 K."
+        },
+        {
+            "name": "Rn_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Rn}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 86."
+        },
+        {
+            "name": "Rn_t",
+            "type": "text",
+            "value": "\\color(red){Radon}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 222.02 g mol⁻¹, dont la température d'ébulition est de 211.3 K et celle de fusion de 202.1 K."
+        },
+        {
+            "name": "Fr_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Fr}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 87."
+        },
+        {
+            "name": "Fr_t",
+            "type": "text",
+            "value": "\\color(red){Francium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 223.02 g mol⁻¹, dont la température d'ébulition est de 950.1 K et celle de fusion de 300 K."
+        },
+        {
+            "name": "Ra_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Ra}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 88."
+        },
+        {
+            "name": "Ra_t",
+            "type": "text",
+            "value": "\\color(red){Radium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 226.03 g mol⁻¹, dont la température d'ébulition est de 1413.1 K et celle de fusion de 973.1 K."
+        },
+        {
+            "name": "Th_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){Th}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 90."
+        },
+        {
+            "name": "Th_t",
+            "type": "text",
+            "value": "\\color(red){Thorium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 232.04 g mol⁻¹, dont la température d'ébulition est de 5060.1 K et celle de fusion de 2023.1 K."
+        },
+        {
+            "name": "U_s",
+            "type": "text",
+            "value": "\\size(150){\\color(blue){U}}",
+            "context": "s",
+            "information": "Son numéro atomique est le 92."
+        },
+        {
+            "name": "U_t",
+            "type": "text",
+            "value": "\\color(red){Uranium}",
+            "context": "t",
+            "rotate" : true,
+            "information": "Élément de masse atomique de 238.03 g mol⁻¹, dont la température d'ébulition est de 4091.1 K et celle de fusion de 1405.5 K."
+        }
+    ],
+    
+    "associations": [
+        ["H_s","H_t"],
+        ["He_s","He_t"],
+        ["Li_s","Li_t"],
+        ["Be_s","Be_t"],
+        ["B_s","B_t"],
+        ["C_s","C_t"],
+        ["N_s","N_t"],
+        ["O_s","O_t"],
+        ["F_s","F_t"],
+        ["Ne_s","Ne_t"],
+        ["Na_s","Na_t"],
+        ["Mg_s","Mg_t"],
+        ["Al_s","Al_t"],
+        ["Si_s","Si_t"],
+        ["P_s","P_t"],
+        ["S_s","S_t"],
+        ["Cl_s","Cl_t"],
+        ["Ar_s","Ar_t"],
+        ["K_s","K_t"],
+        ["Ca_s","Ca_t"],
+        ["Ti_s","Ti_t"],
+        ["V_s","V_t"],
+        ["Cr_s","Cr_t"],
+        ["Mn_s","Mn_t"],
+        ["Fe_s","Fe_t"],
+        ["Co_s","Co_t"],
+        ["Ni_s","Ni_t"],
+        ["Cu_s","Cu_t"],
+        ["Zn_s","Zn_t"],
+        ["Ga_s","Ga_t"],
+        ["Ge_s","Ge_t"],
+        ["As_s","As_t"],
+        ["Se_s","Se_t"],
+        ["Br_s","Br_t"],
+        ["Kr_s","Kr_t"],
+        ["Rb_s","Rb_t"],
+        ["Sr_s","Sr_t"],
+        ["Y_s","Y_t"],
+        ["Zr_s","Zr_t"],
+        ["Mo_s","Mo_t"],
+        ["Rh_s","Rh_t"],
+        ["Pd_s","Pd_t"],
+        ["Ag_s","Ag_t"],
+        ["Cd_s","Cd_t"],
+        ["In_s","In_t"],
+        ["Sn_s","Sn_t"],
+        ["Sb_s","Sb_t"],
+        ["Te_s","Te_t"],
+        ["I_s","I_t"],
+        ["Xe_s","Xe_t"],
+        ["Cs_s","Cs_t"],
+        ["Ba_s","Ba_t"],
+        ["Ce_s","Ce_t"],
+        ["Eu_s","Eu_t"],
+        ["Hf_s","Hf_t"],
+        ["Ta_s","Ta_t"],
+        ["W_s","W_t"],
+        ["Re_s","Re_t"],
+        ["Os_s","Os_t"],
+        ["Ir_s","Ir_t"],
+        ["Pt_s","Pt_t"],
+        ["Au_s","Au_t"],
+        ["Hg_s","Hg_t"],
+        ["Tl_s","Tl_t"],
+        ["Pb_s","Pb_t"],
+        ["Bi_s","Bi_t"],
+        ["Po_s","Po_t"],
+        ["Rn_s","Rn_t"],
+        ["Fr_s","Fr_t"],
+        ["Ra_s","Ra_t"],
+        ["Th_s","Th_t"],
+        ["U_s","U_t"]
+    ]
+}

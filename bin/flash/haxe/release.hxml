@@ -5,11 +5,12 @@
 -cp src
 -cp fonts
 -D tools=1
--D openfl_ver=1.0.6
+-D openfl_ver=1.0.7
 -D openfl
+-D fdb
 -D web
 -swf-version 11
 -swf bin/flash/bin/Mahjong.swf
--swf-header 800:480:60:FFFFFF
+-swf-header 1024:768:60:FFFFFF
 -cp bin/flash/haxe
 #--remap nme:flash

@@ -36,10 +36,9 @@ class TileModel extends Model
 		if (_type == "text")
 		{
 			_value = LatexParser.toHtml(data.value);
-			//trace(_value);
 		}
 		
-		_rotated = (data.rotated == true);
+		_rotated = data.rotate;
 		
 		if (data.information != null)
 		{

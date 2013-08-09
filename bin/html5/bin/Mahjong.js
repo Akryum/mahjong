@@ -986,6 +986,7 @@ flash.display.DisplayObjectContainer.prototype = $extend(flash.display.Interacti
 				var $r;
 				child.nmeRemoveFromStage();
 				child.set_parent(null);
+				if($this.getChildIndex(child) >= 0) throw "Not removed properly";
 				$r = child;
 				return $r;
 			}(this));
@@ -1043,6 +1044,7 @@ flash.display.DisplayObjectContainer.prototype = $extend(flash.display.Interacti
 	,nmeRemoveChild: function(child) {
 		child.nmeRemoveFromStage();
 		child.set_parent(null);
+		if(this.getChildIndex(child) >= 0) throw "Not removed properly";
 		return child;
 	}
 	,nmeInvalidateMatrix: function(local) {
@@ -1147,6 +1149,12 @@ flash.display.DisplayObjectContainer.prototype = $extend(flash.display.Interacti
 		if(object.parent == this) {
 			this.setChildIndex(object,this.nmeChildren.length - 1);
 			return object;
+		}
+		var _g = 0, _g1 = this.nmeChildren;
+		while(_g < _g1.length) {
+			var child = _g1[_g];
+			++_g;
+			if(child == object) throw "Internal error: child already existed at index " + this.getChildIndex(object);
 		}
 		object.set_parent(this);
 		if(this.nmeIsOnStage()) object.nmeAddToStage(this);
@@ -1575,6 +1583,16 @@ StringTools.urlDecode = function(s) {
 StringTools.startsWith = function(s,start) {
 	return s.length >= start.length && HxOverrides.substr(s,0,start.length) == start;
 }
+StringTools.isSpace = function(s,pos) {
+	var c = HxOverrides.cca(s,pos);
+	return c > 8 && c < 14 || c == 32;
+}
+StringTools.rtrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,l - r - 1)) r++;
+	if(r > 0) return HxOverrides.substr(s,0,l - r); else return s;
+}
 StringTools.replace = function(s,sub,by) {
 	return s.split(sub).join(by);
 }
@@ -1996,6 +2014,7 @@ com.gamekit.mvc.view.View.prototype = $extend(flash.display.Sprite.prototype,{
 	,destroy: function() {
 		if(this.parent != null) this.parent.removeChild(this);
 		while(this.nmeChildren.length > 0) this.removeChildAt(0);
+		this._clear();
 		this._dismissModel();
 		this._model = null;
 	}
@@ -2008,6 +2027,7 @@ $hxClasses["com.gamekit.text.LatexParser"] = com.gamekit.text.LatexParser;
 com.gamekit.text.LatexParser.__name__ = ["com","gamekit","text","LatexParser"];
 com.gamekit.text.LatexParser.toHtml = function(latex) {
 	var reg;
+	latex = StringTools.replace(latex,"\\n","#R#");
 	reg = new EReg("\\\\size\\(([0-9]+)\\)\\{(.*)\\}","i");
 	reg.match(latex);
 	latex = reg.map(latex,com.gamekit.text.LatexParser._replaceSize);
@@ -2020,7 +2040,7 @@ com.gamekit.text.LatexParser.toHtml = function(latex) {
 	reg = new EReg("\\^\\((#[0-9a-f]{6}|[a-z]+)\\)\\{(.*)\\}","i");
 	reg.match(latex);
 	latex = reg.map(latex,com.gamekit.text.LatexParser._replaceSup);
-	latex = StringTools.replace(latex,"\n","<br/>");
+	latex = StringTools.replace(latex,"#R#","<br/>");
 	return latex;
 }
 com.gamekit.text.LatexParser._replaceSize = function(reg) {
@@ -2043,25 +2063,248 @@ com.gamekit.text.LatexParser._replaceSup = function(reg) {
 com.mahjong = {}
 com.mahjong.Mahjong = function() {
 	flash.display.Sprite.call(this);
-	this._tileModels = new Array();
-	this._tileViews = new Array();
-	var tileData = "{\r\n            \"name\": \"H_s\",\r\n            \"type\": \"text\",\r\n            \"value\": \"\\\\size(150){\\\\color(blue){H}}\",\r\n            \"context\": \"s\",\r\n            \"information\": \"Son numéro atomique est le 1.\"\r\n        }";
-	var tileModel = new com.mahjong.model.TileModel();
-	tileModel.parseJson(tjson.TJSON.parse(tileData));
-	var tileView = new com.mahjong.view.TileView();
-	tileView.setSize(48,72);
-	tileView.set_model(tileModel);
-	tileView.set_x(100);
-	tileView.set_y(100);
-	this.addChild(tileView);
+	this._map = new com.mahjong.view.MapView();
+	this.addChild(this._map);
+	this.loadMod("data/mods/elements.json");
+	this.loadMap("data/maps/turtle");
 };
 $hxClasses["com.mahjong.Mahjong"] = com.mahjong.Mahjong;
 com.mahjong.Mahjong.__name__ = ["com","mahjong","Mahjong"];
 com.mahjong.Mahjong.__super__ = flash.display.Sprite;
 com.mahjong.Mahjong.prototype = $extend(flash.display.Sprite.prototype,{
-	__class__: com.mahjong.Mahjong
+	_onMapLoaded: function(e) {
+		var mapFile = this._mapLoader.data;
+		var map = new com.mahjong.model.MapModel();
+		map.parseString(mapFile);
+		this._activeMap = map;
+		if(this._activeMod != null) this._buildMap();
+		this._mapLoader.removeEventListener(flash.events.Event.COMPLETE,$bind(this,this._onMapLoaded));
+		this._mapLoader = null;
+	}
+	,_onModLoaded: function(e) {
+		var modFile = this._modLoader.data;
+		var mod = new com.mahjong.model.ModModel();
+		mod.parseJson(tjson.TJSON.parse(modFile));
+		console.log("mod: " + mod.get_name() + " by: " + mod.get_author() + " rules: " + mod.get_rules() + " tiles: " + mod.get_tiles().length + " associations: " + mod.get_associations().length);
+		this._activeMod = mod;
+		if(this._activeMap != null) this._buildMap();
+		this._modLoader.removeEventListener(flash.events.Event.COMPLETE,$bind(this,this._onModLoaded));
+		this._modLoader = null;
+	}
+	,_buildMap: function() {
+		this._map.set_modModel(this._activeMod);
+		this._map.set_model(this._activeMap);
+	}
+	,loadMap: function(url) {
+		if(this._mapLoader != null) {
+		}
+		if(this._activeMap != null) this._activeMap.destroy();
+		this._mapLoader = new flash.net.URLLoader();
+		this._mapLoader.addEventListener(flash.events.Event.COMPLETE,$bind(this,this._onMapLoaded));
+		this._mapLoader.load(new flash.net.URLRequest(url));
+	}
+	,loadMod: function(url) {
+		if(this._modLoader != null) {
+		}
+		if(this._activeMod != null) this._activeMod.destroy();
+		this._modLoader = new flash.net.URLLoader();
+		this._modLoader.addEventListener(flash.events.Event.COMPLETE,$bind(this,this._onModLoaded));
+		this._modLoader.load(new flash.net.URLRequest(url));
+	}
+	,__class__: com.mahjong.Mahjong
 });
+com.mahjong.map = {}
+com.mahjong.map.MapTile = function() {
+};
+$hxClasses["com.mahjong.map.MapTile"] = com.mahjong.map.MapTile;
+com.mahjong.map.MapTile.__name__ = ["com","mahjong","map","MapTile"];
+com.mahjong.map.MapTile.prototype = {
+	set_layer: function(value) {
+		return this._layer = value;
+	}
+	,get_layer: function() {
+		return this._layer;
+	}
+	,set_y: function(value) {
+		return this._y = value;
+	}
+	,get_y: function() {
+		return this._y;
+	}
+	,set_x: function(value) {
+		return this._x = value;
+	}
+	,get_x: function() {
+		return this._x;
+	}
+	,__class__: com.mahjong.map.MapTile
+	,__properties__: {set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y",set_layer:"set_layer",get_layer:"get_layer"}
+}
 com.mahjong.model = {}
+com.mahjong.model.MapModel = function() {
+	com.gamekit.mvc.model.Model.call(this);
+	this._layers = new Array();
+	this._tiles = new Array();
+};
+$hxClasses["com.mahjong.model.MapModel"] = com.mahjong.model.MapModel;
+com.mahjong.model.MapModel.__name__ = ["com","mahjong","model","MapModel"];
+com.mahjong.model.MapModel.__super__ = com.gamekit.mvc.model.Model;
+com.mahjong.model.MapModel.prototype = $extend(com.gamekit.mvc.model.Model.prototype,{
+	get_tiles: function() {
+		return this._tiles;
+	}
+	,get_layers: function() {
+		return this._layers;
+	}
+	,set_height: function(value) {
+		return this._height = value;
+	}
+	,get_height: function() {
+		return this._height;
+	}
+	,set_width: function(value) {
+		return this._width = value;
+	}
+	,get_width: function() {
+		return this._width;
+	}
+	,parseString: function(data) {
+		data = StringTools.rtrim(data);
+		data = StringTools.replace(data,"\n","");
+		if(data.charAt(data.length - 1) == ";") data = HxOverrides.substr(data,0,data.length - 1);
+		var lines = data.split(";");
+		var details = lines.shift().split(",");
+		this._name = details[0];
+		this._width = Std.parseInt(details[1]);
+		this._height = Std.parseInt(details[2]);
+		this._layers = new Array();
+		this._tiles = new Array();
+		var tiles;
+		var tile;
+		var layer;
+		var x = 0;
+		var y = 0;
+		var layerIndex = 0;
+		var _g = 0;
+		while(_g < lines.length) {
+			var layerData = lines[_g];
+			++_g;
+			x = 0;
+			y = 0;
+			layer = new Array();
+			tiles = layerData.split("");
+			var _g1 = 0;
+			while(_g1 < tiles.length) {
+				var tileChar = tiles[_g1];
+				++_g1;
+				if(layer[y] == null) layer[y] = new Array();
+				if(tileChar == ".") tile = null; else {
+					tile = new com.mahjong.map.MapTile();
+					tile.set_x(x);
+					tile.set_y(y);
+					tile.set_layer(layerIndex);
+					if(tileChar == "%" || tileChar == "#") {
+						var _g2 = tile;
+						_g2.set_y(_g2.get_y() - 0.5);
+					}
+					if(tileChar == "&" || tileChar == "#") {
+						var _g2 = tile;
+						_g2.set_x(_g2.get_x() - 0.5);
+					}
+					this._tiles.push(tile);
+				}
+				layer[y][x] = tile;
+				x++;
+				if(x == this._width) {
+					x = 0;
+					y++;
+				}
+			}
+			this._layers.push(layer);
+			layerIndex++;
+		}
+	}
+	,destroy: function() {
+		com.gamekit.mvc.model.Model.prototype.destroy.call(this);
+		this._layers = null;
+		this._tiles = null;
+	}
+	,__class__: com.mahjong.model.MapModel
+	,__properties__: $extend(com.gamekit.mvc.model.Model.prototype.__properties__,{set_width:"set_width",get_width:"get_width",set_height:"set_height",get_height:"get_height",get_layers:"get_layers",get_tiles:"get_tiles"})
+});
+com.mahjong.model.ModModel = function() {
+	this._rules = "";
+	this._author = "";
+	com.gamekit.mvc.model.Model.call(this);
+	this._tiles = new Array();
+	this._associations = new Array();
+};
+$hxClasses["com.mahjong.model.ModModel"] = com.mahjong.model.ModModel;
+com.mahjong.model.ModModel.__name__ = ["com","mahjong","model","ModModel"];
+com.mahjong.model.ModModel.__super__ = com.gamekit.mvc.model.Model;
+com.mahjong.model.ModModel.prototype = $extend(com.gamekit.mvc.model.Model.prototype,{
+	set_associations: function(value) {
+		return this._associations = value;
+	}
+	,get_associations: function() {
+		return this._associations;
+	}
+	,set_tiles: function(value) {
+		return this._tiles = value;
+	}
+	,get_tiles: function() {
+		return this._tiles;
+	}
+	,set_rules: function(value) {
+		return this._rules = value;
+	}
+	,get_rules: function() {
+		return this._rules;
+	}
+	,set_author: function(value) {
+		return this._author = value;
+	}
+	,get_author: function() {
+		return this._author;
+	}
+	,parseJson: function(data) {
+		com.gamekit.mvc.model.Model.prototype.parseJson.call(this,data);
+		this._author = data.author;
+		this._rules = data.rules;
+		if(data.pieces != null) {
+			var tileModel;
+			var _g = 0, _g1 = js.Boot.__cast(data.pieces , Array);
+			while(_g < _g1.length) {
+				var tile = _g1[_g];
+				++_g;
+				tileModel = new com.mahjong.model.TileModel();
+				tileModel.parseJson(tile);
+				this._tiles.push(tileModel);
+			}
+		}
+		if(data.associations != null) {
+			var _g = 0, _g1 = js.Boot.__cast(data.associations , Array);
+			while(_g < _g1.length) {
+				var association = _g1[_g];
+				++_g;
+				this._associations.push([association[0],association[1]]);
+			}
+		}
+	}
+	,destroy: function() {
+		com.gamekit.mvc.model.Model.prototype.destroy.call(this);
+		var _g = 0, _g1 = this._tiles;
+		while(_g < _g1.length) {
+			var tile = _g1[_g];
+			++_g;
+			tile.destroy();
+		}
+		this._tiles = null;
+		this._associations = null;
+	}
+	,__class__: com.mahjong.model.ModModel
+	,__properties__: $extend(com.gamekit.mvc.model.Model.prototype.__properties__,{set_author:"set_author",get_author:"get_author",set_rules:"set_rules",get_rules:"get_rules",set_tiles:"set_tiles",get_tiles:"get_tiles",set_associations:"set_associations",get_associations:"get_associations"})
+});
 com.mahjong.model.TileModel = function() {
 	this._context = null;
 	this._information = "";
@@ -2108,7 +2351,7 @@ com.mahjong.model.TileModel.prototype = $extend(com.gamekit.mvc.model.Model.prot
 		com.gamekit.mvc.model.Model.prototype._parseJson.call(this,data);
 		if(data.type == "text" || data.type == "image") this._type = data.type;
 		if(this._type == "text") this._value = com.gamekit.text.LatexParser.toHtml(data.value);
-		this._rotated = data.rotated == true;
+		this._rotated = data.rotate;
 		if(data.information != null) this._information = data.information; else this._information = "";
 		this._context = data.context;
 	}
@@ -2116,17 +2359,88 @@ com.mahjong.model.TileModel.prototype = $extend(com.gamekit.mvc.model.Model.prot
 	,__properties__: $extend(com.gamekit.mvc.model.Model.prototype.__properties__,{set_type:"set_type",get_type:"get_type",set_value:"set_value",get_value:"get_value",set_rotated:"set_rotated",get_rotated:"get_rotated",set_information:"set_information",get_information:"get_information",set_context:"set_context",get_context:"get_context"})
 });
 com.mahjong.view = {}
+com.mahjong.view.MapView = function() {
+	com.gamekit.mvc.view.View.call(this);
+};
+$hxClasses["com.mahjong.view.MapView"] = com.mahjong.view.MapView;
+com.mahjong.view.MapView.__name__ = ["com","mahjong","view","MapView"];
+com.mahjong.view.MapView.__super__ = com.gamekit.mvc.view.View;
+com.mahjong.view.MapView.prototype = $extend(com.gamekit.mvc.view.View.prototype,{
+	set_modModel: function(value) {
+		return this._modModel = value;
+	}
+	,get_modModel: function() {
+		return this._modModel;
+	}
+	,get_mapModel: function() {
+		return this._mapModel;
+	}
+	,_applyModel: function() {
+		com.gamekit.mvc.view.View.prototype._applyModel.call(this);
+		this._mapModel = this._model;
+		if(this._mapModel != null && this._modModel != null) {
+			this._clear();
+			var tileModels = new Array();
+			var _g = 0, _g1 = this._modModel.get_tiles();
+			while(_g < _g1.length) {
+				var tileModel = _g1[_g];
+				++_g;
+				tileModels.push(tileModel);
+			}
+			var _g = 0, _g1 = this._mapModel.get_tiles();
+			while(_g < _g1.length) {
+				var mapTile = _g1[_g];
+				++_g;
+				var index = Math.round(Math.random() * (tileModels.length - 1));
+				var tileModel = tileModels.splice(index,1)[0];
+				var tileView = new com.mahjong.view.TileView();
+				tileView.setSize(com.mahjong.view.TileView.defaultSizeWidth,com.mahjong.view.TileView.defaultSizeHeight);
+				tileView.set_model(tileModel);
+				tileView.set_x(com.mahjong.view.TileView.defaultSizeWidth * mapTile.get_x() - com.mahjong.view.TileView.depth * mapTile.get_layer());
+				tileView.set_y(com.mahjong.view.TileView.defaultSizeHeight * mapTile.get_y() - com.mahjong.view.TileView.depth * mapTile.get_layer());
+				this.addChild(tileView);
+			}
+		}
+	}
+	,_clear: function() {
+		com.gamekit.mvc.view.View.prototype._clear.call(this);
+		if(this._tiles != null) {
+			var _g = 0, _g1 = this._tiles;
+			while(_g < _g1.length) {
+				var tile = _g1[_g];
+				++_g;
+				tile.destroy();
+			}
+		}
+		this._tiles = null;
+	}
+	,_resize: function() {
+		com.gamekit.mvc.view.View.prototype._resize.call(this);
+	}
+	,destroy: function() {
+		com.gamekit.mvc.view.View.prototype.destroy.call(this);
+		this._mapModel = null;
+		this._modModel = null;
+		this._tiles = null;
+	}
+	,__class__: com.mahjong.view.MapView
+	,__properties__: $extend(com.gamekit.mvc.view.View.prototype.__properties__,{get_mapModel:"get_mapModel",set_modModel:"set_modModel",get_modModel:"get_modModel"})
+});
 com.mahjong.view.TileView = function() {
 	com.gamekit.mvc.view.View.call(this);
 	this._background = new flash.display.Shape();
+	this._background.set_filters([new flash.filters.DropShadowFilter(4,45,0,0.3,8,8,1,1)]);
 	this.addChild(this._background);
+	this._labelContainer = new flash.display.Sprite();
+	this.addChild(this._labelContainer);
 	this._label = new flash.text.TextField();
 	this._label.selectable = false;
 	this._label.mouseEnabled = false;
 	this._label.set_autoSize("LEFT");
+	this._label.multiline = true;
 	this._label.embedFonts = true;
-	this.addChild(this._label);
-	var format = new flash.text.TextFormat("Aller",12,0);
+	this._labelContainer.addChild(this._label);
+	var format = new flash.text.TextFormat("Aller",12,0,false,false,false,null,null,flash.text.TextFormatAlign.CENTER);
 	this._label.set_defaultTextFormat(format);
 	this._image = new flash.display.Bitmap();
 	this.addChild(this._image);
@@ -2148,23 +2462,22 @@ com.mahjong.view.TileView.prototype = $extend(com.gamekit.mvc.view.View.prototyp
 	}
 	,_drawBackground: function() {
 		this._background.get_graphics().clear();
-		var roundDiameter = 20;
-		var depth = 5;
-		var depthAngle = Math.PI / 4;
 		this._background.get_graphics().lineStyle(1,0,1,true,flash.display.LineScaleMode.NONE);
 		this._background.get_graphics().beginFill(11184810,1);
-		this._background.get_graphics().drawRoundRect(Math.cos(depthAngle) * depth,Math.sin(depthAngle) * depth,this._sizeWidth,this._sizeHeight,roundDiameter,roundDiameter);
+		this._background.get_graphics().drawRoundRect(com.mahjong.view.TileView.depth,com.mahjong.view.TileView.depth,this._sizeWidth,this._sizeHeight,com.mahjong.view.TileView.roundDiameter,com.mahjong.view.TileView.roundDiameter);
 		this._background.get_graphics().lineStyle(1,0,1,true,flash.display.LineScaleMode.NONE);
 		this._background.get_graphics().beginFill(16777215,1);
-		this._background.get_graphics().drawRoundRect(0,0,this._sizeWidth,this._sizeHeight,roundDiameter,roundDiameter);
+		this._background.get_graphics().drawRoundRect(0,0,this._sizeWidth,this._sizeHeight,com.mahjong.view.TileView.roundDiameter,com.mahjong.view.TileView.roundDiameter);
 	}
 	,_resize: function() {
 		com.gamekit.mvc.view.View.prototype._resize.call(this);
 		this._drawBackground();
 		if(this._tileModel == null) return;
-		if(this._tileModel.get_rotated()) this._label.set_rotation(45); else this._label.set_rotation(0);
-		this._label.set_x((this._sizeWidth - this._label.get_width()) * 0.5);
-		this._label.set_y((this._sizeHeight - this._label.get_height()) * 0.5);
+		if(this._tileModel.get_rotated()) this._labelContainer.set_rotation(90); else this._labelContainer.set_rotation(0);
+		this._label.set_x(-this._label.get_width() * 0.5);
+		this._label.set_y(-this._label.get_height() * 0.5);
+		this._labelContainer.set_x(this._sizeWidth * 0.5);
+		this._labelContainer.set_y(this._sizeHeight * 0.5);
 		this._updateImagePosition();
 	}
 	,_applyModel: function() {
@@ -2196,6 +2509,8 @@ com.mahjong.view.TileView.prototype = $extend(com.gamekit.mvc.view.View.prototyp
 		this._label = null;
 		this._image = null;
 		this._imageLoader = null;
+		this._tileModel = null;
+		this._labelContainer = null;
 	}
 	,__class__: com.mahjong.view.TileView
 	,__properties__: $extend(com.gamekit.mvc.view.View.prototype.__properties__,{get_tileModel:"get_tileModel"})
@@ -6404,6 +6719,7 @@ flash.media.Sound.prototype = $extend(flash.events.EventDispatcher.prototype,{
 	}
 	,nmeOnSoundLoadError: function(evt) {
 		this.nmeRemoveEventListeners();
+		console.log("Error loading sound '" + this.nmeStreamUrl + "'");
 		var evt1 = new flash.events.IOErrorEvent(flash.events.IOErrorEvent.IO_ERROR);
 		this.dispatchEvent(evt1);
 	}
@@ -6428,12 +6744,19 @@ flash.media.Sound.prototype = $extend(flash.events.EventDispatcher.prototype,{
 	}
 	,nmeLoad: function(stream,context,mime) {
 		if(mime == null) mime = "";
+		if(mime == null) {
+			var url = stream.url.split("?");
+			var extension = HxOverrides.substr(url[0],url[0].lastIndexOf(".") + 1,null);
+			mime = flash.media.Sound.nmeMimeForExtension(extension);
+		}
+		if(mime == null || !flash.media.Sound.nmeCanPlayMime(mime)) console.log("Warning: '" + stream.url + "' with type '" + mime + "' may not play on this browser.");
 		this.nmeStreamUrl = stream.url;
 		try {
 			this.nmeSoundCache = new flash.net.URLLoader();
 			this.nmeAddEventListeners();
 			this.nmeSoundCache.load(stream);
 		} catch( e ) {
+			console.log("Warning: Could not preload '" + stream.url + "'");
 		}
 	}
 	,nmeAddEventListeners: function() {
@@ -6492,6 +6815,7 @@ flash.media.SoundChannel.prototype = $extend(flash.events.EventDispatcher.protot
 		return this.soundTransform = v;
 	}
 	,__onStalled: function(evt) {
+		console.log("sound stalled");
 		if(this.nmeAudio != null) this.nmeAudio.load();
 	}
 	,__onSoundSeeked: function(evt) {
@@ -6517,6 +6841,7 @@ flash.media.SoundChannel.prototype = $extend(flash.events.EventDispatcher.protot
 		}
 	}
 	,__onProgress: function(evt) {
+		console.log("sound progress: " + Std.string(evt));
 	}
 	,stop: function() {
 		if(this.nmeAudio != null) {
@@ -9207,6 +9532,10 @@ flash.text.Font.DEFAULT_CLASS_NAME = "flash.text.Font";
 flash.text.Font.nmeRegisteredFonts = new Array();
 com.DefaultFont.resourceName = "NME_font_com_DefaultFont";
 com.gamekit.text.LatexParser.baseFontSize = 14;
+com.mahjong.view.TileView.roundDiameter = 16;
+com.mahjong.view.TileView.depth = 5;
+com.mahjong.view.TileView.defaultSizeWidth = 48;
+com.mahjong.view.TileView.defaultSizeHeight = 72;
 flash.Lib.HTML_ACCELEROMETER_EVENT_TYPE = "devicemotion";
 flash.Lib.HTML_ORIENTATION_EVENT_TYPE = "orientationchange";
 flash.Lib.DEFAULT_HEIGHT = 500;
@@ -9616,3 +9945,5 @@ openfl.display.Tilesheet.TILE_BLEND_MULTIPLY = 131072;
 openfl.display.Tilesheet.TILE_BLEND_SCREEN = 262144;
 ApplicationMain.main();
 })();
+
+//@ sourceMappingURL=Mahjong.js.map

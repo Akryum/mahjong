@@ -36,6 +36,8 @@ class View extends Sprite implements IDestroyable
 			removeChildAt(0);
 		}
 		
+		_clear();
+		
 		// Model
 		_dismissModel();
 		

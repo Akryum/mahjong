@@ -14,6 +14,9 @@ class LatexParser
 	{
 		var reg:EReg;
 		
+		// Return
+		latex = StringTools.replace(latex, "\\n", "<br/>");
+		
 		// Size
 		reg = ~/\\size\(([0-9]+)\)\{(.*)\}/i;
 		reg.match(latex);
@@ -34,8 +37,6 @@ class LatexParser
 		reg.match(latex);
 		latex = reg.map(latex, _replaceSup);
 		
-		// Return
-		latex = StringTools.replace(latex, "\n", "<br/>");
 		
 		return latex;
 	}

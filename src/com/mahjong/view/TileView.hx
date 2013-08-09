@@ -7,9 +7,14 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.LineScaleMode;
 import flash.display.Shape;
+import flash.display.Sprite;
+import flash.events.MouseEvent;
+import flash.filters.DropShadowFilter;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
+import motion.Actuate;
 
 /**
  * ...
@@ -17,44 +22,68 @@ import flash.text.TextFormat;
  */
 class TileView extends View
 {
+	// Config
+	static public var roundDiameter:Float = 16;
+	static public var depth:Float = 5;
+	static public var defaultSizeWidth:Float = 48;
+	static public var defaultSizeHeight:Float = 72;
+	
+	
 	// Model
 	private var _tileModel:TileModel;
 	
 	// Display
 	private var _background:Shape;
+	private var _labelContainer:Sprite;
 	private var _label:TextField;
 	private var _image:Bitmap;
 	
 	// Loading
 	private var _imageLoader:BitmapLoader;
+	
+	// Display depth correction
+	private var _displayDepth:Float;
 
 	public function new() 
 	{
 		super();
 		
+		buttonMode = true;
+		
 		_background = new Shape();
 		#if cpp
 		_background.cacheAsBitmap = true;
 		#end
+		_background.filters = [new DropShadowFilter(4, 45, 0, 0.3, 8, 8, 1, 1)];
 		addChild(_background);
+		
+		_labelContainer = new Sprite();
+		addChild(_labelContainer);
 		
 		_label = new TextField();
 		_label.selectable = false;
 		_label.mouseEnabled = false;
 		_label.autoSize = TextFieldAutoSize.LEFT;
+		_label.multiline = true;
 		_label.embedFonts = true;
-		addChild(_label);
+		_labelContainer.addChild(_label);
 		
-		var format:TextFormat = new TextFormat("Aller", 12, 0x000000);
+		var format:TextFormat = new TextFormat("Aller", 12, 0x000000, false, false, false, null, null, TextFormatAlign.CENTER);
 		_label.defaultTextFormat = format;
 		
 		_image = new Bitmap();
 		addChild(_image);
+		
+		addEventListener(MouseEvent.ROLL_OVER, _onMouseOver);
+		addEventListener(MouseEvent.ROLL_OUT, _onMouseOut);
 	}
 	
 	override public function destroy():Void 
 	{
 		super.destroy();
+		
+		removeEventListener(MouseEvent.ROLL_OVER, _onMouseOver);
+		removeEventListener(MouseEvent.ROLL_OUT, _onMouseOut);
 		
 		if (_imageLoader != null)
 		{
@@ -65,6 +94,8 @@ class TileView extends View
 		_label = null;
 		_image = null;
 		_imageLoader = null;
+		_tileModel = null;
+		_labelContainer = null;
 	}
 	
 	/* PRIVATE */
@@ -128,14 +159,16 @@ class TileView extends View
 		// Text label
 		if (_tileModel.rotated)
 		{
-			_label.rotation = 45;
+			_labelContainer.rotation = 90;
 		}
 		else
 		{
-			_label.rotation = 0;
+			_labelContainer.rotation = 0;
 		}
-		_label.x = (_sizeWidth - _label.width) * 0.5;
-		_label.y = (_sizeHeight - _label.height) * 0.5;
+		_label.x = - _label.width * 0.5;
+		_label.y = - _label.height * 0.5;
+		_labelContainer.x = _sizeWidth * 0.5;
+		_labelContainer.y = _sizeHeight * 0.5;
 		
 		// Image
 		_updateImagePosition();
@@ -145,16 +178,12 @@ class TileView extends View
 	{
 		_background.graphics.clear();
 		
-		var roundDiameter:Float = 20;
-		var depth:Float = 5;
-		var depthAngle:Float = Math.PI / 4; // 45°
-		
 		// Back Style
 		_background.graphics.lineStyle(1, 0, 1, true, LineScaleMode.NONE);
 		_background.graphics.beginFill(0xaaaaaa, 1);
 		
 		// Back drawing
-		_background.graphics.drawRoundRect(Math.cos(depthAngle) * depth, Math.sin(depthAngle) * depth, _sizeWidth, _sizeHeight, roundDiameter, roundDiameter);
+		_background.graphics.drawRoundRect(depth, depth, _sizeWidth, _sizeHeight, roundDiameter, roundDiameter);
 		
 		// Front Style
 		_background.graphics.lineStyle(1, 0, 1, true, LineScaleMode.NONE);
@@ -177,6 +206,20 @@ class TileView extends View
 		_image.y = (_sizeHeight - _image.height) * 0.5;
 	}
 	
+	/* EVENTS */
+	
+	private function _onMouseOver(e:MouseEvent):Void
+	{
+		Actuate.stop(_label);
+		Actuate.tween(_label, 0.3, { alpha:0.7 } );
+	}
+	
+	private function _onMouseOut(e:MouseEvent):Void
+	{
+		Actuate.stop(_label);
+		Actuate.tween(_label, 0.3, { alpha:1 } );
+	}
+	
 	/* GETTERS */
 	
 	function get_tileModel():TileModel 
@@ -185,4 +228,19 @@ class TileView extends View
 	}
 	
 	public var tileModel(get_tileModel, null):TileModel;
+	
+	function get_displayDepth():Float 
+	{
+		return _displayDepth;
+	}
+	
+	function set_displayDepth(value:Float):Float 
+	{
+		return _displayDepth = value;
+	}
+	
+	/**
+	 * Display depth correction number.
+	 */
+	public var displayDepth(get_displayDepth, set_displayDepth):Float;
 }
