@@ -2,6 +2,7 @@ package com.mahjong.view;
 
 import com.gamekit.display.BitmapLoader;
 import com.gamekit.mvc.view.View;
+import com.mahjong.map.MapTile;
 import com.mahjong.model.TileModel;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -16,6 +17,7 @@ import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import motion.Actuate;
+import motion.easing.Linear;
 
 /**
  * ...
@@ -32,15 +34,19 @@ class TileView extends View
 	
 	// Model
 	private var _tileModel:TileModel;
+	private var _mapTile:MapTile;
 	
 	// Properties
 	private var _enableFX:Bool = false;
+	private var _selected:Bool = false;
 	
 	// Display
+	private var _container:Sprite;
 	private var _background:Shape;
 	private var _labelContainer:Sprite;
 	private var _label:TextField;
 	private var _image:Bitmap;
+	private var _selectedIndicator:Shape;
 	
 	// Loading
 	private var _imageLoader:BitmapLoader;
@@ -54,11 +60,19 @@ class TileView extends View
 		
 		buttonMode = true;
 		
+		_container = new Sprite();
+		addChild(_container);
+		
 		_background = new Shape();
-		addChild(_background);
+		_container.addChild(_background);
+		
+		_selectedIndicator = new Shape();
+		_selectedIndicator.alpha = 0;
+		_selectedIndicator.visible = false;
+		_container.addChild(_selectedIndicator);
 		
 		_labelContainer = new Sprite();
-		addChild(_labelContainer);
+		_container.addChild(_labelContainer);
 		
 		_label = new TextField();
 		_label.selectable = false;
@@ -72,7 +86,7 @@ class TileView extends View
 		_label.defaultTextFormat = format;
 		
 		_image = new Bitmap();
-		addChild(_image);
+		_container.addChild(_image);
 		
 		_updateFX();
 		
@@ -98,6 +112,18 @@ class TileView extends View
 		_imageLoader = null;
 		_tileModel = null;
 		_labelContainer = null;
+		_selectedIndicator = null;
+		_container = null;
+	}
+	
+	public function shake():Void
+	{
+		Actuate.stop(_container);
+		_container.x = -2;
+		Actuate.tween(_container, 0.05, { x:2 } ).repeat(4).reflect(true).ease(Linear.easeNone).onComplete(function():Void
+		{
+			_container.x = 0;
+		});
 	}
 	
 	/* PRIVATE */
@@ -153,6 +179,9 @@ class TileView extends View
 		// Background
 		_drawBackground();
 		
+		// Selection
+		_drawSelectedIndicator();
+		
 		if (_tileModel == null)
 		{
 			return;
@@ -195,6 +224,16 @@ class TileView extends View
 		_background.graphics.drawRoundRect(0, 0, _sizeWidth, _sizeHeight, roundDiameter, roundDiameter);
 	}
 	
+	private function _drawSelectedIndicator():Void
+	{
+		_selectedIndicator.graphics.clear();
+		
+		var thickness:Float = 3;
+		
+		_selectedIndicator.graphics.lineStyle(thickness, 0xfa9a0a, 0.9, true);
+		_selectedIndicator.graphics.drawRoundRect(thickness * 0.5 + 1, thickness * 0.5 + 1, _sizeWidth - thickness - 1, _sizeHeight - thickness - 1, roundDiameter - thickness * 2 + 2, roundDiameter - thickness * 2 + 2);
+	}
+	
 	private function _showImage(data:BitmapData):Void
 	{
 		_image.bitmapData = data;
@@ -214,7 +253,7 @@ class TileView extends View
 		if (_enableFX)
 		{
 			// Main Shadow
-			_background.filters = [new DropShadowFilter(4, 45, 0, 0.3, 8, 8, 1, 1)];
+			_background.filters = [new DropShadowFilter(6, 45, 0, 0.3, 16, 16, 1, 1)];
 		}
 		else
 		{
@@ -222,6 +261,19 @@ class TileView extends View
 			_background.filters = [];
 		}
 		#end
+	}
+	
+	private function _updateSelected():Void
+	{
+		Actuate.stop(_selectedIndicator);
+		if (_selected)
+		{
+			Actuate.tween(_selectedIndicator, 0.3, { alpha:1 } );
+		}
+		else
+		{
+			Actuate.tween(_selectedIndicator, 0.3, { alpha:0 } );
+		}
 	}
 	
 	/* EVENTS */
@@ -280,4 +332,35 @@ class TileView extends View
 	 * Indicates if special effects (like shadows) are activated or not.
 	 */
 	public var enableFX(get_enableFX, set_enableFX):Bool;
+	
+	function get_selected():Bool 
+	{
+		return _selected;
+	}
+	
+	function set_selected(value:Bool):Bool 
+	{
+		_selected = value;
+		
+		_updateSelected();
+		
+		return _selected;
+	}
+	
+	public var selected(get_selected, set_selected):Bool;
+	
+	function get_mapTile():MapTile 
+	{
+		return _mapTile;
+	}
+	
+	function set_mapTile(value:MapTile):MapTile 
+	{
+		return _mapTile = value;
+	}
+	
+	/**
+	 * Related position on the map.
+	 */
+	public var mapTile(get_mapTile, set_mapTile):MapTile;
 }

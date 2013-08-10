@@ -67,20 +67,16 @@ class MapView extends View
 			// Clear the tiles
 			_clear();
 			
-			// Tile models
 			_tiles = new Array();
-			// Model list copy
-			var tileModels:Array<TileModel> = new Array();
-			for (tileModel in _modModel.tiles)
-			{
-				tileModels.push(tileModel);
-			}
 			
-			for (mapTile in _mapModel.tiles)
+			// Map tiles fill
+			_mapModel.mod = _modModel;
+			_mapModel.build();
+			var tileModel:TileModel;
+			for (mapTile in _mapModel.generatedTiles)
 			{
-				// Chooses randomly a tile model
-				var index:Int = Math.round(Math.random() * (tileModels.length - 1));
-				var tileModel:TileModel = tileModels.splice(index, 1)[0];
+				// Tile model
+				tileModel = mapTile.model;
 				
 				// Creates the tile view
 				var tileView:TileView = new TileView();
@@ -90,6 +86,10 @@ class MapView extends View
 				tileView.x = TileView.defaultSizeWidth * mapTile.x - TileView.depth * mapTile.layer;
 				tileView.y = TileView.defaultSizeHeight * mapTile.y - TileView.depth * mapTile.layer;
 				_tiles.push(tileView);
+				
+				// Association between view and map position
+				mapTile.tile = tileView;
+				tileView.mapTile = mapTile;
 			}
 			
 			// Depth correction sorting
@@ -106,12 +106,6 @@ class MapView extends View
 				var tY:Float = tileView.y;
 				var angle:Float = Math.random() * Math.PI * 2;
 				var distance:Float = Math.random() * 400;
-				//var angle:Float = -Math.PI * 3/4;
-				//var distance:Float = 50;
-				//var sX:Float = tX + Math.cos(angle) * distance;
-				//var sY:Float = tY + Math.sin(angle) * distance;
-				//var sX:Float = _mapModel.width * TileView.defaultSizeWidth * 0.5;
-				//var sY:Float = _mapModel.height * TileView.defaultSizeHeight * 0.5;
 				var sX:Float = _mapModel.width * TileView.defaultSizeWidth * 0.5 + Math.cos(angle) * distance;
 				var sY:Float = _mapModel.height * TileView.defaultSizeHeight * 0.5 + Math.sin(angle) * distance;
 				tileView.x = sX;

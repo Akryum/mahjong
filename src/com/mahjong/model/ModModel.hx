@@ -64,6 +64,41 @@ class ModModel extends Model
 		}
 	}
 	
+	/**
+	 * Returns the tile with the given name. If not found, returns null.
+	 * @param	name	Searched tile name
+	 * @return	Tile with the given name or null
+	 */
+	public function getTileByName(name:String):TileModel
+	{
+		for (tile in _tiles)
+		{
+			if (tile.name == name)
+			{
+				return tile;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Indicates if two tiles are associated.
+	 * @param	tile1
+	 * @param	tile2
+	 * @return	Boolean
+	 */
+	public function areAssociated(tile1:TileModel, tile2:TileModel):Bool
+	{
+		for (asso in _associations)
+		{
+			if ((asso[0] == tile1.name && asso[1] == tile2.name) || (asso[1] == tile1.name && asso[0] == tile2.name))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/* GETTERS */
 	
 	function get_author():String 

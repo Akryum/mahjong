@@ -1,4 +1,6 @@
 package com.mahjong.map;
+import com.mahjong.model.TileModel;
+import com.mahjong.view.TileView;
 
 /**
  * ...
@@ -9,6 +11,11 @@ class MapTile
 	private var _x:Float;
 	private var _y:Float;
 	private var _layer:Int;
+	
+	private var _tile:TileView;
+	private var _model:TileModel;
+	
+	private var _enabled:Bool = false;
 
 	public function new() 
 	{
@@ -52,5 +59,41 @@ class MapTile
 	}
 	
 	public var layer(get_layer, set_layer):Int;
+	
+	function get_tile():TileView 
+	{
+		return _tile;
+	}
+	
+	function set_tile(value:TileView):TileView 
+	{
+		return _tile = value;
+	}
+	
+	public var tile(get_tile, set_tile):TileView;
+	
+	function get_enabled():Bool 
+	{
+		return _enabled;
+	}
+	
+	function set_enabled(value:Bool):Bool 
+	{
+		return _enabled = value;
+	}
+	
+	public var enabled(get_enabled, set_enabled):Bool;
+	
+	function get_model():TileModel 
+	{
+		return _model;
+	}
+	
+	function set_model(value:TileModel):TileModel 
+	{
+		return _model = value;
+	}
+	
+	public var model(get_model, set_model):TileModel;
 	
 }
