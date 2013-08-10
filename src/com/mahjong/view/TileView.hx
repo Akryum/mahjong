@@ -231,7 +231,7 @@ class TileView extends View
 		var thickness:Float = 3;
 		
 		_selectedIndicator.graphics.lineStyle(thickness, 0xfa9a0a, 0.9, true);
-		_selectedIndicator.graphics.drawRoundRect(thickness * 0.5 + 1, thickness * 0.5 + 1, _sizeWidth - thickness - 1, _sizeHeight - thickness - 1, roundDiameter - thickness * 2 + 2, roundDiameter - thickness * 2 + 2);
+		_selectedIndicator.graphics.drawRoundRect(thickness * 0.5, thickness * 0.5, _sizeWidth - thickness, _sizeHeight - thickness, roundDiameter - thickness * 2 + 2, roundDiameter - thickness * 2 + 2);
 	}
 	
 	private function _showImage(data:BitmapData):Void
