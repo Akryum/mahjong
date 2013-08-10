@@ -117,7 +117,10 @@ class MapView extends View
 				tileView.x = sX;
 				tileView.y = sY;
 				tileView.alpha = 0;
-				Actuate.tween(tileView, 0.2, { x: tX, y: tY, alpha:1 } ).delay(delay).ease(Cubic.easeOut);
+				Actuate.tween(tileView, 0.2, { x: tX, y: tY, alpha:1 } ).delay(delay).ease(Cubic.easeOut).onComplete(function():Void
+				{
+					tileView.enableFX = true;
+				});
 				delay += 0.01;
 			}
 		}

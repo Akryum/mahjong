@@ -13,10 +13,38 @@
 #include <openfl/AssetType.h>
 #include <openfl/Assets.h>
 #include <nme/AssetData.h>
+#include <motion/easing/ExpoEaseInOut.h>
+#include <motion/easing/ExpoEaseIn.h>
+#include <motion/easing/CubicEaseOut.h>
+#include <motion/easing/CubicEaseInOut.h>
+#include <motion/easing/CubicEaseIn.h>
+#include <motion/easing/Cubic.h>
+#include <motion/actuators/TransformActuator.h>
+#include <motion/actuators/PropertyPathDetails.h>
+#include <motion/actuators/PropertyDetails.h>
+#include <motion/actuators/MotionPathActuator.h>
+#include <motion/actuators/MethodActuator.h>
+#include <motion/actuators/FilterActuator.h>
+#include <motion/LinearPath.h>
+#include <motion/BezierPath.h>
+#include <motion/ComponentPath.h>
+#include <motion/IComponentPath.h>
+#include <motion/MotionPath.h>
+#include <motion/_Actuate/TweenTimer.h>
+#include <motion/_Actuate/TransformOptions.h>
+#include <motion/_Actuate/EffectsOptions.h>
+#include <motion/Actuate.h>
+#include <motion/easing/ExpoEaseOut.h>
+#include <motion/easing/IEasing.h>
+#include <motion/easing/Expo.h>
+#include <motion/actuators/SimpleActuator.h>
+#include <motion/actuators/GenericActuator.h>
+#include <motion/actuators/IGenericActuator.h>
 #include <haxe/io/Error.h>
 #include <haxe/io/Eof.h>
 #include <haxe/io/BytesBuffer.h>
 #include <haxe/ds/StringMap.h>
+#include <haxe/ds/ObjectMap.h>
 #include <haxe/ds/IntMap.h>
 #include <haxe/Timer.h>
 #include <haxe/Resource.h>
@@ -28,6 +56,7 @@
 #include <openfl/utils/IMemoryRange.h>
 #include <flash/ui/Keyboard.h>
 #include <flash/text/TextLineMetrics.h>
+#include <flash/text/TextFormatAlign.h>
 #include <flash/text/TextFormat.h>
 #include <flash/text/TextFieldType.h>
 #include <flash/text/TextFieldAutoSize.h>
@@ -55,6 +84,7 @@
 #include <flash/geom/Point.h>
 #include <flash/geom/Matrix.h>
 #include <flash/geom/ColorTransform.h>
+#include <flash/filters/DropShadowFilter.h>
 #include <flash/filters/BitmapFilter.h>
 #include <flash/events/SampleDataEvent.h>
 #include <flash/events/ProgressEvent.h>
@@ -106,7 +136,11 @@
 #include <cpp/zip/Compress.h>
 #include <cpp/rtti/FieldNumericIntegerLookup.h>
 #include <com/mahjong/view/TileView.h>
+#include <com/mahjong/view/MapView.h>
 #include <com/mahjong/model/TileModel.h>
+#include <com/mahjong/model/ModModel.h>
+#include <com/mahjong/model/MapModel.h>
+#include <com/mahjong/map/MapTile.h>
 #include <com/mahjong/Mahjong.h>
 #include <com/gamekit/text/LatexParser.h>
 #include <com/gamekit/mvc/view/View.h>
@@ -161,10 +195,38 @@ hx::RegisterResources( hx::GetResources() );
 ::openfl::AssetType_obj::__register();
 ::openfl::Assets_obj::__register();
 ::nme::AssetData_obj::__register();
+::motion::easing::ExpoEaseInOut_obj::__register();
+::motion::easing::ExpoEaseIn_obj::__register();
+::motion::easing::CubicEaseOut_obj::__register();
+::motion::easing::CubicEaseInOut_obj::__register();
+::motion::easing::CubicEaseIn_obj::__register();
+::motion::easing::Cubic_obj::__register();
+::motion::actuators::TransformActuator_obj::__register();
+::motion::actuators::PropertyPathDetails_obj::__register();
+::motion::actuators::PropertyDetails_obj::__register();
+::motion::actuators::MotionPathActuator_obj::__register();
+::motion::actuators::MethodActuator_obj::__register();
+::motion::actuators::FilterActuator_obj::__register();
+::motion::LinearPath_obj::__register();
+::motion::BezierPath_obj::__register();
+::motion::ComponentPath_obj::__register();
+::motion::IComponentPath_obj::__register();
+::motion::MotionPath_obj::__register();
+::motion::_Actuate::TweenTimer_obj::__register();
+::motion::_Actuate::TransformOptions_obj::__register();
+::motion::_Actuate::EffectsOptions_obj::__register();
+::motion::Actuate_obj::__register();
+::motion::easing::ExpoEaseOut_obj::__register();
+::motion::easing::IEasing_obj::__register();
+::motion::easing::Expo_obj::__register();
+::motion::actuators::SimpleActuator_obj::__register();
+::motion::actuators::GenericActuator_obj::__register();
+::motion::actuators::IGenericActuator_obj::__register();
 ::haxe::io::Error_obj::__register();
 ::haxe::io::Eof_obj::__register();
 ::haxe::io::BytesBuffer_obj::__register();
 ::haxe::ds::StringMap_obj::__register();
+::haxe::ds::ObjectMap_obj::__register();
 ::haxe::ds::IntMap_obj::__register();
 ::haxe::Timer_obj::__register();
 ::haxe::Resource_obj::__register();
@@ -176,6 +238,7 @@ hx::RegisterResources( hx::GetResources() );
 ::openfl::utils::IMemoryRange_obj::__register();
 ::flash::ui::Keyboard_obj::__register();
 ::flash::text::TextLineMetrics_obj::__register();
+::flash::text::TextFormatAlign_obj::__register();
 ::flash::text::TextFormat_obj::__register();
 ::flash::text::TextFieldType_obj::__register();
 ::flash::text::TextFieldAutoSize_obj::__register();
@@ -203,6 +266,7 @@ hx::RegisterResources( hx::GetResources() );
 ::flash::geom::Point_obj::__register();
 ::flash::geom::Matrix_obj::__register();
 ::flash::geom::ColorTransform_obj::__register();
+::flash::filters::DropShadowFilter_obj::__register();
 ::flash::filters::BitmapFilter_obj::__register();
 ::flash::events::SampleDataEvent_obj::__register();
 ::flash::events::ProgressEvent_obj::__register();
@@ -254,7 +318,11 @@ hx::RegisterResources( hx::GetResources() );
 ::cpp::zip::Compress_obj::__register();
 ::cpp::rtti::FieldNumericIntegerLookup_obj::__register();
 ::com::mahjong::view::TileView_obj::__register();
+::com::mahjong::view::MapView_obj::__register();
 ::com::mahjong::model::TileModel_obj::__register();
+::com::mahjong::model::ModModel_obj::__register();
+::com::mahjong::model::MapModel_obj::__register();
+::com::mahjong::map::MapTile_obj::__register();
 ::com::mahjong::Mahjong_obj::__register();
 ::com::gamekit::text::LatexParser_obj::__register();
 ::com::gamekit::mvc::view::View_obj::__register();
@@ -335,7 +403,11 @@ hx::RegisterResources( hx::GetResources() );
 ::com::gamekit::mvc::view::View_obj::__boot();
 ::com::gamekit::text::LatexParser_obj::__boot();
 ::com::mahjong::Mahjong_obj::__boot();
+::com::mahjong::map::MapTile_obj::__boot();
+::com::mahjong::model::MapModel_obj::__boot();
+::com::mahjong::model::ModModel_obj::__boot();
 ::com::mahjong::model::TileModel_obj::__boot();
+::com::mahjong::view::MapView_obj::__boot();
 ::com::mahjong::view::TileView_obj::__boot();
 ::flash::Memory_obj::__boot();
 ::flash::_Vector::Vector_Impl__obj::__boot();
@@ -383,6 +455,7 @@ hx::RegisterResources( hx::GetResources() );
 ::flash::events::ProgressEvent_obj::__boot();
 ::flash::events::SampleDataEvent_obj::__boot();
 ::flash::filters::BitmapFilter_obj::__boot();
+::flash::filters::DropShadowFilter_obj::__boot();
 ::flash::geom::ColorTransform_obj::__boot();
 ::flash::geom::Matrix_obj::__boot();
 ::flash::geom::Point_obj::__boot();
@@ -410,6 +483,7 @@ hx::RegisterResources( hx::GetResources() );
 ::flash::text::TextFieldAutoSize_obj::__boot();
 ::flash::text::TextFieldType_obj::__boot();
 ::flash::text::TextFormat_obj::__boot();
+::flash::text::TextFormatAlign_obj::__boot();
 ::flash::text::TextLineMetrics_obj::__boot();
 ::flash::ui::Keyboard_obj::__boot();
 ::openfl::utils::IMemoryRange_obj::__boot();
@@ -420,10 +494,38 @@ hx::RegisterResources( hx::GetResources() );
 ::haxe::Resource_obj::__boot();
 ::haxe::Timer_obj::__boot();
 ::haxe::ds::IntMap_obj::__boot();
+::haxe::ds::ObjectMap_obj::__boot();
 ::haxe::ds::StringMap_obj::__boot();
 ::haxe::io::BytesBuffer_obj::__boot();
 ::haxe::io::Eof_obj::__boot();
 ::haxe::io::Error_obj::__boot();
+::motion::actuators::IGenericActuator_obj::__boot();
+::motion::actuators::GenericActuator_obj::__boot();
+::motion::actuators::SimpleActuator_obj::__boot();
+::motion::easing::Expo_obj::__boot();
+::motion::easing::IEasing_obj::__boot();
+::motion::easing::ExpoEaseOut_obj::__boot();
+::motion::Actuate_obj::__boot();
+::motion::_Actuate::EffectsOptions_obj::__boot();
+::motion::_Actuate::TransformOptions_obj::__boot();
+::motion::_Actuate::TweenTimer_obj::__boot();
+::motion::MotionPath_obj::__boot();
+::motion::IComponentPath_obj::__boot();
+::motion::ComponentPath_obj::__boot();
+::motion::BezierPath_obj::__boot();
+::motion::LinearPath_obj::__boot();
+::motion::actuators::FilterActuator_obj::__boot();
+::motion::actuators::MethodActuator_obj::__boot();
+::motion::actuators::MotionPathActuator_obj::__boot();
+::motion::actuators::PropertyDetails_obj::__boot();
+::motion::actuators::PropertyPathDetails_obj::__boot();
+::motion::actuators::TransformActuator_obj::__boot();
+::motion::easing::Cubic_obj::__boot();
+::motion::easing::CubicEaseIn_obj::__boot();
+::motion::easing::CubicEaseInOut_obj::__boot();
+::motion::easing::CubicEaseOut_obj::__boot();
+::motion::easing::ExpoEaseIn_obj::__boot();
+::motion::easing::ExpoEaseInOut_obj::__boot();
 ::nme::AssetData_obj::__boot();
 ::openfl::Assets_obj::__boot();
 ::openfl::AssetType_obj::__boot();

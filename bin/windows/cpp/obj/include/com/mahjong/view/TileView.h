@@ -21,8 +21,10 @@ HX_DECLARE_CLASS2(flash,display,IBitmapDrawable)
 HX_DECLARE_CLASS2(flash,display,InteractiveObject)
 HX_DECLARE_CLASS2(flash,display,Shape)
 HX_DECLARE_CLASS2(flash,display,Sprite)
+HX_DECLARE_CLASS2(flash,events,Event)
 HX_DECLARE_CLASS2(flash,events,EventDispatcher)
 HX_DECLARE_CLASS2(flash,events,IEventDispatcher)
+HX_DECLARE_CLASS2(flash,events,MouseEvent)
 HX_DECLARE_CLASS2(flash,text,TextField)
 namespace com{
 namespace mahjong{
@@ -49,9 +51,30 @@ class HXCPP_CLASS_ATTRIBUTES  TileView_obj : public ::com::gamekit::mvc::view::V
 		void __Visit(HX_VISIT_PARAMS);
 		::String __ToString() const { return HX_CSTRING("TileView"); }
 
+		virtual bool set_enableFX( bool value);
+		Dynamic set_enableFX_dyn();
+
+		virtual bool get_enableFX( );
+		Dynamic get_enableFX_dyn();
+
+		virtual Float set_displayDepth( Float value);
+		Dynamic set_displayDepth_dyn();
+
+		virtual Float get_displayDepth( );
+		Dynamic get_displayDepth_dyn();
+
 		::com::mahjong::model::TileModel tileModel;
 		virtual ::com::mahjong::model::TileModel get_tileModel( );
 		Dynamic get_tileModel_dyn();
+
+		virtual Void _onMouseOut( ::flash::events::MouseEvent e);
+		Dynamic _onMouseOut_dyn();
+
+		virtual Void _onMouseOver( ::flash::events::MouseEvent e);
+		Dynamic _onMouseOver_dyn();
+
+		virtual Void _updateFX( );
+		Dynamic _updateFX_dyn();
 
 		virtual Void _updateImagePosition( );
 		Dynamic _updateImagePosition_dyn();
@@ -68,11 +91,18 @@ class HXCPP_CLASS_ATTRIBUTES  TileView_obj : public ::com::gamekit::mvc::view::V
 
 		virtual Void destroy( );
 
+		Float _displayDepth;
 		::com::gamekit::display::BitmapLoader _imageLoader;
 		::flash::display::Bitmap _image;
 		::flash::text::TextField _label;
+		::flash::display::Sprite _labelContainer;
 		::flash::display::Shape _background;
+		bool _enableFX;
 		::com::mahjong::model::TileModel _tileModel;
+		static Float roundDiameter;
+		static Float depth;
+		static Float defaultSizeWidth;
+		static Float defaultSizeHeight;
 };
 
 } // end namespace com

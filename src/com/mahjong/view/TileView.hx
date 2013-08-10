@@ -5,6 +5,7 @@ import com.gamekit.mvc.view.View;
 import com.mahjong.model.TileModel;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.display.BlendMode;
 import flash.display.LineScaleMode;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -32,6 +33,9 @@ class TileView extends View
 	// Model
 	private var _tileModel:TileModel;
 	
+	// Properties
+	private var _enableFX:Bool = false;
+	
 	// Display
 	private var _background:Shape;
 	private var _labelContainer:Sprite;
@@ -51,10 +55,6 @@ class TileView extends View
 		buttonMode = true;
 		
 		_background = new Shape();
-		#if cpp
-		_background.cacheAsBitmap = true;
-		#end
-		_background.filters = [new DropShadowFilter(4, 45, 0, 0.3, 8, 8, 1, 1)];
 		addChild(_background);
 		
 		_labelContainer = new Sprite();
@@ -73,6 +73,8 @@ class TileView extends View
 		
 		_image = new Bitmap();
 		addChild(_image);
+		
+		_updateFX();
 		
 		addEventListener(MouseEvent.ROLL_OVER, _onMouseOver);
 		addEventListener(MouseEvent.ROLL_OUT, _onMouseOut);
@@ -206,6 +208,22 @@ class TileView extends View
 		_image.y = (_sizeHeight - _image.height) * 0.5;
 	}
 	
+	private function _updateFX():Void
+	{
+		#if !html5
+		if (_enableFX)
+		{
+			// Main Shadow
+			_background.filters = [new DropShadowFilter(4, 45, 0, 0.3, 8, 8, 1, 1)];
+		}
+		else
+		{
+			// Main Shadow
+			_background.filters = [];
+		}
+		#end
+	}
+	
 	/* EVENTS */
 	
 	private function _onMouseOver(e:MouseEvent):Void
@@ -243,4 +261,23 @@ class TileView extends View
 	 * Display depth correction number.
 	 */
 	public var displayDepth(get_displayDepth, set_displayDepth):Float;
+	
+	function get_enableFX():Bool 
+	{
+		return _enableFX;
+	}
+	
+	function set_enableFX(value:Bool):Bool 
+	{
+		_enableFX = value;
+		
+		_updateFX();
+		
+		return _enableFX;
+	}
+	
+	/**
+	 * Indicates if special effects (like shadows) are activated or not.
+	 */
+	public var enableFX(get_enableFX, set_enableFX):Bool;
 }

@@ -7,7 +7,7 @@
 -cp fonts
 -D no_console=1
 -D tools=1
--D openfl_ver=1.0.6
+-D openfl_ver=1.0.7
 -D openfl
 -D windows
 -D desktop

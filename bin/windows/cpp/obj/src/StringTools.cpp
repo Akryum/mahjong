@@ -42,6 +42,47 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC1(StringTools_obj,urlEncode,return )
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(StringTools_obj,urlDecode,return )
 
+bool StringTools_obj::isSpace( ::String s,int pos){
+	HX_STACK_PUSH("StringTools::isSpace","C:\\HaxeToolkit\\haxe/std/StringTools.hx",162);
+	HX_STACK_ARG(s,"s");
+	HX_STACK_ARG(pos,"pos");
+	HX_STACK_LINE(163)
+	Dynamic c = s.charCodeAt(pos);		HX_STACK_VAR(c,"c");
+	HX_STACK_LINE(164)
+	return (bool((bool((c > (int)8)) && bool((c < (int)14)))) || bool((c == (int)32)));
+}
+
+
+STATIC_HX_DEFINE_DYNAMIC_FUNC2(StringTools_obj,isSpace,return )
+
+::String StringTools_obj::rtrim( ::String s){
+	HX_STACK_PUSH("StringTools::rtrim","C:\\HaxeToolkit\\haxe/std/StringTools.hx",201);
+	HX_STACK_ARG(s,"s");
+	HX_STACK_LINE(205)
+	int l = s.length;		HX_STACK_VAR(l,"l");
+	HX_STACK_LINE(206)
+	int r = (int)0;		HX_STACK_VAR(r,"r");
+	HX_STACK_LINE(207)
+	while(((bool((r < l)) && bool(::StringTools_obj::isSpace(s,((l - r) - (int)1)))))){
+		HX_STACK_LINE(207)
+		(r)++;
+	}
+	HX_STACK_LINE(210)
+	if (((r > (int)0))){
+		HX_STACK_LINE(210)
+		return s.substr((int)0,(l - r));
+	}
+	else{
+		HX_STACK_LINE(212)
+		return s;
+	}
+	HX_STACK_LINE(210)
+	return null();
+}
+
+
+STATIC_HX_DEFINE_DYNAMIC_FUNC1(StringTools_obj,rtrim,return )
+
 ::String StringTools_obj::replace( ::String s,::String sub,::String by){
 	HX_STACK_PUSH("StringTools::replace","C:\\HaxeToolkit\\haxe/std/StringTools.hx",288);
 	HX_STACK_ARG(s,"s");
@@ -72,7 +113,11 @@ void StringTools_obj::__Visit(HX_VISIT_PARAMS)
 Dynamic StringTools_obj::__Field(const ::String &inName,bool inCallProp)
 {
 	switch(inName.length) {
+	case 5:
+		if (HX_FIELD_EQ(inName,"rtrim") ) { return rtrim_dyn(); }
+		break;
 	case 7:
+		if (HX_FIELD_EQ(inName,"isSpace") ) { return isSpace_dyn(); }
 		if (HX_FIELD_EQ(inName,"replace") ) { return replace_dyn(); }
 		break;
 	case 9:
@@ -95,6 +140,8 @@ void StringTools_obj::__GetFields(Array< ::String> &outFields)
 static ::String sStaticFields[] = {
 	HX_CSTRING("urlEncode"),
 	HX_CSTRING("urlDecode"),
+	HX_CSTRING("isSpace"),
+	HX_CSTRING("rtrim"),
 	HX_CSTRING("replace"),
 	String(null()) };
 

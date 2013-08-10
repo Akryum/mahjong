@@ -34,6 +34,12 @@ class HXCPP_CLASS_ATTRIBUTES  StringTools_obj : public hx::Object{
 		static ::String urlDecode( ::String s);
 		static Dynamic urlDecode_dyn();
 
+		static bool isSpace( ::String s,int pos);
+		static Dynamic isSpace_dyn();
+
+		static ::String rtrim( ::String s);
+		static Dynamic rtrim_dyn();
+
 		static ::String replace( ::String s,::String sub,::String by);
 		static Dynamic replace_dyn();
 

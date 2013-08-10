@@ -35,8 +35,14 @@ class HXCPP_CLASS_ATTRIBUTES  IntMap_obj : public hx::Object{
 		hx::Object *__ToInterface(const hx::type_info &inType);
 		::String __ToString() const { return HX_CSTRING("IntMap"); }
 
+		virtual Dynamic iterator( );
+		Dynamic iterator_dyn();
+
 		virtual bool remove( int key);
 		Dynamic remove_dyn();
+
+		virtual bool exists( int key);
+		Dynamic exists_dyn();
 
 		virtual Dynamic get( int key);
 		Dynamic get_dyn();

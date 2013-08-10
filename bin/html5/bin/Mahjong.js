@@ -1490,11 +1490,11 @@ NMEPreloader.prototype = $extend(flash.display.Sprite.prototype,{
 	,onInit: function() {
 	}
 	,getWidth: function() {
-		var width = 800;
+		var width = 1024;
 		if(width > 0) return width; else return flash.Lib.get_current().get_stage().get_stageWidth();
 	}
 	,getHeight: function() {
-		var height = 480;
+		var height = 768;
 		if(height > 0) return height; else return flash.Lib.get_current().get_stage().get_stageHeight();
 	}
 	,getBackgroundColor: function() {
@@ -1516,9 +1516,19 @@ Reflect.field = function(o,field) {
 	}
 	return v;
 }
+Reflect.setField = function(o,field,value) {
+	o[field] = value;
+}
 Reflect.getProperty = function(o,field) {
 	var tmp;
 	return o == null?null:o.__properties__ && (tmp = o.__properties__["get_" + field])?o[tmp]():o[field];
+}
+Reflect.setProperty = function(o,field,value) {
+	var tmp;
+	if(o.__properties__ && (tmp = o.__properties__["set_" + field])) o[tmp](value); else o[field] = value;
+}
+Reflect.callMethod = function(o,func,args) {
+	return func.apply(o,args);
 }
 Reflect.fields = function(o) {
 	var a = [];
@@ -2027,7 +2037,7 @@ $hxClasses["com.gamekit.text.LatexParser"] = com.gamekit.text.LatexParser;
 com.gamekit.text.LatexParser.__name__ = ["com","gamekit","text","LatexParser"];
 com.gamekit.text.LatexParser.toHtml = function(latex) {
 	var reg;
-	latex = StringTools.replace(latex,"\\n","#R#");
+	latex = StringTools.replace(latex,"\\n","<br/>");
 	reg = new EReg("\\\\size\\(([0-9]+)\\)\\{(.*)\\}","i");
 	reg.match(latex);
 	latex = reg.map(latex,com.gamekit.text.LatexParser._replaceSize);
@@ -2040,7 +2050,6 @@ com.gamekit.text.LatexParser.toHtml = function(latex) {
 	reg = new EReg("\\^\\((#[0-9a-f]{6}|[a-z]+)\\)\\{(.*)\\}","i");
 	reg.match(latex);
 	latex = reg.map(latex,com.gamekit.text.LatexParser._replaceSup);
-	latex = StringTools.replace(latex,"#R#","<br/>");
 	return latex;
 }
 com.gamekit.text.LatexParser._replaceSize = function(reg) {
@@ -2083,6 +2092,9 @@ com.mahjong.Mahjong.prototype = $extend(flash.display.Sprite.prototype,{
 	}
 	,_onModLoaded: function(e) {
 		var modFile = this._modLoader.data;
+		modFile = StringTools.replace(modFile,"\\\\","#SL#");
+		modFile = StringTools.replace(modFile,"\\","\\\\");
+		modFile = StringTools.replace(modFile,"#SL#","\\\\");
 		var mod = new com.mahjong.model.ModModel();
 		mod.parseJson(tjson.TJSON.parse(modFile));
 		console.log("mod: " + mod.get_name() + " by: " + mod.get_author() + " rules: " + mod.get_rules() + " tiles: " + mod.get_tiles().length + " associations: " + mod.get_associations().length);
@@ -2375,11 +2387,15 @@ com.mahjong.view.MapView.prototype = $extend(com.gamekit.mvc.view.View.prototype
 	,get_mapModel: function() {
 		return this._mapModel;
 	}
+	,_sortTileViewOnDepth: function(x,y) {
+		if(x.get_displayDepth() == y.get_displayDepth()) return 0; else if(x.get_displayDepth() > y.get_displayDepth()) return 1; else return -1;
+	}
 	,_applyModel: function() {
 		com.gamekit.mvc.view.View.prototype._applyModel.call(this);
 		this._mapModel = this._model;
 		if(this._mapModel != null && this._modModel != null) {
 			this._clear();
+			this._tiles = new Array();
 			var tileModels = new Array();
 			var _g = 0, _g1 = this._modModel.get_tiles();
 			while(_g < _g1.length) {
@@ -2396,9 +2412,33 @@ com.mahjong.view.MapView.prototype = $extend(com.gamekit.mvc.view.View.prototype
 				var tileView = new com.mahjong.view.TileView();
 				tileView.setSize(com.mahjong.view.TileView.defaultSizeWidth,com.mahjong.view.TileView.defaultSizeHeight);
 				tileView.set_model(tileModel);
+				tileView.set_displayDepth(mapTile.get_x() * this._mapModel.get_height() + mapTile.get_y() + this._mapModel.get_height() * this._mapModel.get_width() * mapTile.get_layer());
 				tileView.set_x(com.mahjong.view.TileView.defaultSizeWidth * mapTile.get_x() - com.mahjong.view.TileView.depth * mapTile.get_layer());
 				tileView.set_y(com.mahjong.view.TileView.defaultSizeHeight * mapTile.get_y() - com.mahjong.view.TileView.depth * mapTile.get_layer());
-				this.addChild(tileView);
+				this._tiles.push(tileView);
+			}
+			this._tiles.sort($bind(this,this._sortTileViewOnDepth));
+			var delay = 0.5;
+			var _g = 0, _g1 = this._tiles;
+			while(_g < _g1.length) {
+				var tileView1 = [_g1[_g]];
+				++_g;
+				this.addChild(tileView1[0]);
+				var tX = tileView1[0].get_x();
+				var tY = tileView1[0].get_y();
+				var angle = Math.random() * Math.PI * 2;
+				var distance = Math.random() * 400;
+				var sX = this._mapModel.get_width() * com.mahjong.view.TileView.defaultSizeWidth * 0.5 + Math.cos(angle) * distance;
+				var sY = this._mapModel.get_height() * com.mahjong.view.TileView.defaultSizeHeight * 0.5 + Math.sin(angle) * distance;
+				tileView1[0].set_x(sX);
+				tileView1[0].set_y(sY);
+				tileView1[0].alpha = 0;
+				motion.Actuate.tween(tileView1[0],0.2,{ x : tX, y : tY, alpha : 1}).delay(delay).ease(motion.easing.Cubic.get_easeOut()).onComplete((function(tileView1) {
+					return function() {
+						tileView1[0].set_enableFX(true);
+					};
+				})(tileView1));
+				delay += 0.01;
 			}
 		}
 	}
@@ -2427,9 +2467,10 @@ com.mahjong.view.MapView.prototype = $extend(com.gamekit.mvc.view.View.prototype
 	,__properties__: $extend(com.gamekit.mvc.view.View.prototype.__properties__,{get_mapModel:"get_mapModel",set_modModel:"set_modModel",get_modModel:"get_modModel"})
 });
 com.mahjong.view.TileView = function() {
+	this._enableFX = false;
 	com.gamekit.mvc.view.View.call(this);
+	this.buttonMode = true;
 	this._background = new flash.display.Shape();
-	this._background.set_filters([new flash.filters.DropShadowFilter(4,45,0,0.3,8,8,1,1)]);
 	this.addChild(this._background);
 	this._labelContainer = new flash.display.Sprite();
 	this.addChild(this._labelContainer);
@@ -2444,13 +2485,40 @@ com.mahjong.view.TileView = function() {
 	this._label.set_defaultTextFormat(format);
 	this._image = new flash.display.Bitmap();
 	this.addChild(this._image);
+	this._updateFX();
+	this.addEventListener(flash.events.MouseEvent.ROLL_OVER,$bind(this,this._onMouseOver));
+	this.addEventListener(flash.events.MouseEvent.ROLL_OUT,$bind(this,this._onMouseOut));
 };
 $hxClasses["com.mahjong.view.TileView"] = com.mahjong.view.TileView;
 com.mahjong.view.TileView.__name__ = ["com","mahjong","view","TileView"];
 com.mahjong.view.TileView.__super__ = com.gamekit.mvc.view.View;
 com.mahjong.view.TileView.prototype = $extend(com.gamekit.mvc.view.View.prototype,{
-	get_tileModel: function() {
+	set_enableFX: function(value) {
+		this._enableFX = value;
+		this._updateFX();
+		return this._enableFX;
+	}
+	,get_enableFX: function() {
+		return this._enableFX;
+	}
+	,set_displayDepth: function(value) {
+		return this._displayDepth = value;
+	}
+	,get_displayDepth: function() {
+		return this._displayDepth;
+	}
+	,get_tileModel: function() {
 		return this._tileModel;
+	}
+	,_onMouseOut: function(e) {
+		motion.Actuate.stop(this._label);
+		motion.Actuate.tween(this._label,0.3,{ alpha : 1});
+	}
+	,_onMouseOver: function(e) {
+		motion.Actuate.stop(this._label);
+		motion.Actuate.tween(this._label,0.3,{ alpha : 0.7});
+	}
+	,_updateFX: function() {
 	}
 	,_updateImagePosition: function() {
 		this._image.set_x((this._sizeWidth - this._image.get_width()) * 0.5);
@@ -2504,6 +2572,8 @@ com.mahjong.view.TileView.prototype = $extend(com.gamekit.mvc.view.View.prototyp
 	}
 	,destroy: function() {
 		com.gamekit.mvc.view.View.prototype.destroy.call(this);
+		this.removeEventListener(flash.events.MouseEvent.ROLL_OVER,$bind(this,this._onMouseOver));
+		this.removeEventListener(flash.events.MouseEvent.ROLL_OUT,$bind(this,this._onMouseOut));
 		if(this._imageLoader != null) this._imageLoader.destroy();
 		this._background = null;
 		this._label = null;
@@ -2513,7 +2583,7 @@ com.mahjong.view.TileView.prototype = $extend(com.gamekit.mvc.view.View.prototyp
 		this._labelContainer = null;
 	}
 	,__class__: com.mahjong.view.TileView
-	,__properties__: $extend(com.gamekit.mvc.view.View.prototype.__properties__,{get_tileModel:"get_tileModel"})
+	,__properties__: $extend(com.gamekit.mvc.view.View.prototype.__properties__,{get_tileModel:"get_tileModel",set_displayDepth:"set_displayDepth",get_displayDepth:"get_displayDepth",set_enableFX:"set_enableFX",get_enableFX:"get_enableFX"})
 });
 var haxe = {}
 haxe.Timer = function() { }
@@ -8966,7 +9036,35 @@ $hxClasses["haxe.ds.ObjectMap"] = haxe.ds.ObjectMap;
 haxe.ds.ObjectMap.__name__ = ["haxe","ds","ObjectMap"];
 haxe.ds.ObjectMap.__interfaces__ = [IMap];
 haxe.ds.ObjectMap.prototype = {
-	set: function(key,value) {
+	iterator: function() {
+		return { ref : this.h, it : this.keys(), hasNext : function() {
+			return this.it.hasNext();
+		}, next : function() {
+			var i = this.it.next();
+			return this.ref[i.__id__];
+		}};
+	}
+	,keys: function() {
+		var a = [];
+		for( var key in this.h.__keys__ ) {
+		if(this.h.hasOwnProperty(key)) a.push(this.h.__keys__[key]);
+		}
+		return HxOverrides.iter(a);
+	}
+	,remove: function(key) {
+		var id = key.__id__;
+		if(!this.h.hasOwnProperty(id)) return false;
+		delete(this.h[id]);
+		delete(this.h.__keys__[id]);
+		return true;
+	}
+	,exists: function(key) {
+		return this.h.hasOwnProperty(key.__id__);
+	}
+	,get: function(key) {
+		return this.h[key.__id__];
+	}
+	,set: function(key,value) {
 		var id = key.__id__ != null?key.__id__:key.__id__ = ++haxe.ds.ObjectMap.count;
 		this.h[id] = value;
 		this.h.__keys__[id] = key;
@@ -9181,6 +9279,1018 @@ js.Boot.__cast = function(o,t) {
 js.Browser = function() { }
 $hxClasses["js.Browser"] = js.Browser;
 js.Browser.__name__ = ["js","Browser"];
+var motion = {}
+motion.actuators = {}
+motion.actuators.IGenericActuator = function() { }
+$hxClasses["motion.actuators.IGenericActuator"] = motion.actuators.IGenericActuator;
+motion.actuators.IGenericActuator.__name__ = ["motion","actuators","IGenericActuator"];
+motion.actuators.IGenericActuator.prototype = {
+	__class__: motion.actuators.IGenericActuator
+}
+motion.actuators.GenericActuator = function(target,duration,properties) {
+	this._autoVisible = true;
+	this._delay = 0;
+	this._reflect = false;
+	this._repeat = 0;
+	this._reverse = false;
+	this._smartRotation = false;
+	this._snapping = false;
+	this.special = false;
+	this.target = target;
+	this.properties = properties;
+	this.duration = duration;
+	this._ease = motion.Actuate.defaultEase;
+};
+$hxClasses["motion.actuators.GenericActuator"] = motion.actuators.GenericActuator;
+motion.actuators.GenericActuator.__name__ = ["motion","actuators","GenericActuator"];
+motion.actuators.GenericActuator.__interfaces__ = [motion.actuators.IGenericActuator];
+motion.actuators.GenericActuator.prototype = {
+	stop: function(properties,complete,sendEvent) {
+	}
+	,snapping: function(value) {
+		if(value == null) value = true;
+		this._snapping = value;
+		this.special = true;
+		return this;
+	}
+	,smartRotation: function(value) {
+		if(value == null) value = true;
+		this._smartRotation = value;
+		this.special = true;
+		return this;
+	}
+	,reverse: function(value) {
+		if(value == null) value = true;
+		this._reverse = value;
+		this.special = true;
+		return this;
+	}
+	,resume: function() {
+	}
+	,repeat: function(times) {
+		if(times == null) times = -1;
+		this._repeat = times;
+		return this;
+	}
+	,reflect: function(value) {
+		if(value == null) value = true;
+		this._reflect = value;
+		this.special = true;
+		return this;
+	}
+	,pause: function() {
+	}
+	,onUpdate: function(handler,parameters) {
+		this._onUpdate = handler;
+		if(parameters == null) this._onUpdateParams = []; else this._onUpdateParams = parameters;
+		return this;
+	}
+	,onRepeat: function(handler,parameters) {
+		this._onRepeat = handler;
+		if(parameters == null) this._onRepeatParams = []; else this._onRepeatParams = parameters;
+		return this;
+	}
+	,onComplete: function(handler,parameters) {
+		this._onComplete = handler;
+		if(parameters == null) this._onCompleteParams = []; else this._onCompleteParams = parameters;
+		if(this.duration == 0) this.complete();
+		return this;
+	}
+	,move: function() {
+	}
+	,ease: function(easing) {
+		this._ease = easing;
+		return this;
+	}
+	,delay: function(duration) {
+		this._delay = duration;
+		return this;
+	}
+	,complete: function(sendEvent) {
+		if(sendEvent == null) sendEvent = true;
+		if(sendEvent) {
+			this.change();
+			if(this._onComplete != null) this._onComplete.apply(this._onComplete,this._onCompleteParams);
+		}
+		motion.Actuate.unload(this);
+	}
+	,change: function() {
+		if(this._onUpdate != null) this._onUpdate.apply(this._onUpdate,this._onUpdateParams);
+	}
+	,autoVisible: function(value) {
+		if(value == null) value = true;
+		this._autoVisible = value;
+		return this;
+	}
+	,apply: function() {
+		var _g = 0, _g1 = Reflect.fields(this.properties);
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			if(Reflect.hasField(this.target,i)) this.target[i] = Reflect.field(this.properties,i); else Reflect.setProperty(this.target,i,Reflect.field(this.properties,i));
+		}
+	}
+	,__class__: motion.actuators.GenericActuator
+}
+motion.actuators.SimpleActuator = function(target,duration,properties) {
+	this.active = true;
+	this.propertyDetails = new Array();
+	this.sendChange = false;
+	this.paused = false;
+	this.cacheVisible = false;
+	this.initialized = false;
+	this.setVisible = false;
+	this.toggleVisible = false;
+	this.startTime = flash.Lib.getTimer() / 1000;
+	motion.actuators.GenericActuator.call(this,target,duration,properties);
+	if(!motion.actuators.SimpleActuator.addedEvent) {
+		motion.actuators.SimpleActuator.addedEvent = true;
+		flash.Lib.get_current().get_stage().addEventListener(flash.events.Event.ENTER_FRAME,motion.actuators.SimpleActuator.stage_onEnterFrame);
+	}
+};
+$hxClasses["motion.actuators.SimpleActuator"] = motion.actuators.SimpleActuator;
+motion.actuators.SimpleActuator.__name__ = ["motion","actuators","SimpleActuator"];
+motion.actuators.SimpleActuator.stage_onEnterFrame = function(event) {
+	var currentTime = flash.Lib.getTimer() / 1000;
+	var actuator;
+	var j = 0;
+	var cleanup = false;
+	var _g1 = 0, _g = motion.actuators.SimpleActuator.actuatorsLength;
+	while(_g1 < _g) {
+		var i = _g1++;
+		actuator = motion.actuators.SimpleActuator.actuators[j];
+		if(actuator.active) {
+			if(currentTime > actuator.timeOffset) actuator.update(currentTime);
+			j++;
+		} else {
+			motion.actuators.SimpleActuator.actuators.splice(j,1);
+			--motion.actuators.SimpleActuator.actuatorsLength;
+		}
+	}
+}
+motion.actuators.SimpleActuator.__super__ = motion.actuators.GenericActuator;
+motion.actuators.SimpleActuator.prototype = $extend(motion.actuators.GenericActuator.prototype,{
+	update: function(currentTime) {
+		if(!this.paused) {
+			var details;
+			var easing;
+			var i;
+			var tweenPosition = (currentTime - this.timeOffset) / this.duration;
+			if(tweenPosition > 1) tweenPosition = 1;
+			if(!this.initialized) this.initialize();
+			if(!this.special) {
+				easing = this._ease.calculate(tweenPosition);
+				var _g1 = 0, _g = this.detailsLength;
+				while(_g1 < _g) {
+					var i1 = _g1++;
+					details = this.propertyDetails[i1];
+					this.setField(details,details.start + details.change * easing);
+				}
+			} else {
+				if(!this._reverse) easing = this._ease.calculate(tweenPosition); else easing = this._ease.calculate(1 - tweenPosition);
+				var endValue;
+				var _g1 = 0, _g = this.detailsLength;
+				while(_g1 < _g) {
+					var i1 = _g1++;
+					details = this.propertyDetails[i1];
+					if(this._smartRotation && (details.propertyName == "rotation" || details.propertyName == "rotationX" || details.propertyName == "rotationY" || details.propertyName == "rotationZ")) {
+						var rotation = details.change % 360;
+						if(rotation > 180) rotation -= 360; else if(rotation < -180) rotation += 360;
+						endValue = details.start + rotation * easing;
+					} else endValue = details.start + details.change * easing;
+					if(!this._snapping) {
+						if(details.isField) details.target[details.propertyName] = endValue; else Reflect.setProperty(details.target,details.propertyName,endValue);
+					} else this.setField(details,Math.round(endValue));
+				}
+			}
+			if(tweenPosition == 1) {
+				if(this._repeat == 0) {
+					this.active = false;
+					if(this.toggleVisible && this.target.alpha == 0) this.target.visible = false;
+					this.complete(true);
+					return;
+				} else {
+					if(this._onRepeat != null) this._onRepeat.apply(this._onRepeat,this._onRepeatParams);
+					if(this._reflect) this._reverse = !this._reverse;
+					this.startTime = currentTime;
+					this.timeOffset = this.startTime + this._delay;
+					if(this._repeat > 0) this._repeat--;
+				}
+			}
+			if(this.sendChange) this.change();
+		}
+	}
+	,stop: function(properties,complete,sendEvent) {
+		if(this.active) {
+			if(properties == null) {
+				this.active = false;
+				if(complete) this.apply();
+				this.complete(sendEvent);
+				return;
+			}
+			var _g = 0, _g1 = Reflect.fields(properties);
+			while(_g < _g1.length) {
+				var i = _g1[_g];
+				++_g;
+				if(Reflect.hasField(this.properties,i)) {
+					this.active = false;
+					if(complete) this.apply();
+					this.complete(sendEvent);
+					return;
+				}
+			}
+		}
+	}
+	,setField: function(details,value) {
+		if(details.isField) details.target[details.propertyName] = value; else Reflect.setProperty(details.target,details.propertyName,value);
+	}
+	,resume: function() {
+		if(this.paused) {
+			this.paused = false;
+			this.timeOffset += (flash.Lib.getTimer() - this.pauseTime) / 1000;
+		}
+	}
+	,pause: function() {
+		this.paused = true;
+		this.pauseTime = flash.Lib.getTimer();
+	}
+	,onUpdate: function(handler,parameters) {
+		this._onUpdate = handler;
+		this._onUpdateParams = parameters;
+		this.sendChange = true;
+		return this;
+	}
+	,move: function() {
+		this.toggleVisible = Reflect.hasField(this.properties,"alpha") && js.Boot.__instanceof(this.target,flash.display.DisplayObject);
+		if(this.toggleVisible && !this.target.visible && this.properties.alpha != 0) {
+			this.setVisible = true;
+			this.cacheVisible = this.target.visible;
+			this.target.visible = true;
+		}
+		this.timeOffset = this.startTime;
+		motion.actuators.SimpleActuator.actuators.push(this);
+		++motion.actuators.SimpleActuator.actuatorsLength;
+	}
+	,initialize: function() {
+		var details;
+		var start;
+		var _g = 0, _g1 = Reflect.fields(this.properties);
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			var isField = true;
+			if(Reflect.hasField(this.target,i)) start = Reflect.field(this.target,i); else {
+				isField = false;
+				start = Reflect.getProperty(this.target,i);
+			}
+			details = new motion.actuators.PropertyDetails(this.target,i,start,Reflect.field(this.properties,i) - start,isField);
+			this.propertyDetails.push(details);
+		}
+		this.detailsLength = this.propertyDetails.length;
+		this.initialized = true;
+	}
+	,delay: function(duration) {
+		this._delay = duration;
+		this.timeOffset = this.startTime + duration;
+		return this;
+	}
+	,autoVisible: function(value) {
+		if(value == null) value = true;
+		this._autoVisible = value;
+		if(!value) {
+			this.toggleVisible = false;
+			if(this.setVisible) this.target.visible = this.cacheVisible;
+		}
+		return this;
+	}
+	,__class__: motion.actuators.SimpleActuator
+});
+motion.easing = {}
+motion.easing.Expo = function() { }
+$hxClasses["motion.easing.Expo"] = motion.easing.Expo;
+motion.easing.Expo.__name__ = ["motion","easing","Expo"];
+motion.easing.Expo.__properties__ = {get_easeOut:"get_easeOut",get_easeInOut:"get_easeInOut",get_easeIn:"get_easeIn"}
+motion.easing.Expo.get_easeIn = function() {
+	return new motion.easing.ExpoEaseIn();
+}
+motion.easing.Expo.get_easeInOut = function() {
+	return new motion.easing.ExpoEaseInOut();
+}
+motion.easing.Expo.get_easeOut = function() {
+	return new motion.easing.ExpoEaseOut();
+}
+motion.easing.IEasing = function() { }
+$hxClasses["motion.easing.IEasing"] = motion.easing.IEasing;
+motion.easing.IEasing.__name__ = ["motion","easing","IEasing"];
+motion.easing.IEasing.prototype = {
+	__class__: motion.easing.IEasing
+}
+motion.easing.ExpoEaseOut = function() {
+};
+$hxClasses["motion.easing.ExpoEaseOut"] = motion.easing.ExpoEaseOut;
+motion.easing.ExpoEaseOut.__name__ = ["motion","easing","ExpoEaseOut"];
+motion.easing.ExpoEaseOut.__interfaces__ = [motion.easing.IEasing];
+motion.easing.ExpoEaseOut.prototype = {
+	ease: function(t,b,c,d) {
+		return t == d?b + c:c * (1 - Math.pow(2,-10 * t / d)) + b;
+	}
+	,calculate: function(k) {
+		return k == 1?1:1 - Math.pow(2,-10 * k);
+	}
+	,__class__: motion.easing.ExpoEaseOut
+}
+motion.Actuate = function() { }
+$hxClasses["motion.Actuate"] = motion.Actuate;
+motion.Actuate.__name__ = ["motion","Actuate"];
+motion.Actuate.apply = function(target,properties,customActuator) {
+	motion.Actuate.stop(target,properties);
+	if(customActuator == null) customActuator = motion.Actuate.defaultActuator;
+	var actuator = Type.createInstance(customActuator,[target,0,properties]);
+	actuator.apply();
+	return actuator;
+}
+motion.Actuate.effects = function(target,duration,overwrite) {
+	if(overwrite == null) overwrite = true;
+	return new motion._Actuate.EffectsOptions(target,duration,overwrite);
+}
+motion.Actuate.getLibrary = function(target) {
+	if(!motion.Actuate.targetLibraries.exists(target)) motion.Actuate.targetLibraries.set(target,new Array());
+	return motion.Actuate.targetLibraries.get(target);
+}
+motion.Actuate.motionPath = function(target,duration,properties,overwrite) {
+	if(overwrite == null) overwrite = true;
+	return motion.Actuate.tween(target,duration,properties,overwrite,motion.actuators.MotionPathActuator);
+}
+motion.Actuate.pause = function(target) {
+	if(js.Boot.__instanceof(target,motion.actuators.GenericActuator)) (js.Boot.__cast(target , motion.actuators.GenericActuator)).pause(); else {
+		var library = motion.Actuate.getLibrary(target);
+		var _g = 0;
+		while(_g < library.length) {
+			var actuator = library[_g];
+			++_g;
+			actuator.pause();
+		}
+	}
+}
+motion.Actuate.pauseAll = function() {
+	var $it0 = motion.Actuate.targetLibraries.iterator();
+	while( $it0.hasNext() ) {
+		var library = $it0.next();
+		var _g = 0;
+		while(_g < library.length) {
+			var actuator = library[_g];
+			++_g;
+			actuator.pause();
+		}
+	}
+}
+motion.Actuate.reset = function() {
+	var $it0 = motion.Actuate.targetLibraries.iterator();
+	while( $it0.hasNext() ) {
+		var library = $it0.next();
+		var i = library.length - 1;
+		while(i >= 0) {
+			library[i].stop(null,false,false);
+			i--;
+		}
+	}
+	motion.Actuate.targetLibraries = new haxe.ds.ObjectMap();
+}
+motion.Actuate.resume = function(target) {
+	if(js.Boot.__instanceof(target,motion.actuators.GenericActuator)) (js.Boot.__cast(target , motion.actuators.GenericActuator)).resume(); else {
+		var library = motion.Actuate.getLibrary(target);
+		var _g = 0;
+		while(_g < library.length) {
+			var actuator = library[_g];
+			++_g;
+			actuator.resume();
+		}
+	}
+}
+motion.Actuate.resumeAll = function() {
+	var $it0 = motion.Actuate.targetLibraries.iterator();
+	while( $it0.hasNext() ) {
+		var library = $it0.next();
+		var _g = 0;
+		while(_g < library.length) {
+			var actuator = library[_g];
+			++_g;
+			actuator.resume();
+		}
+	}
+}
+motion.Actuate.stop = function(target,properties,complete,sendEvent) {
+	if(sendEvent == null) sendEvent = true;
+	if(complete == null) complete = false;
+	if(target != null) {
+		if(js.Boot.__instanceof(target,motion.actuators.GenericActuator)) (js.Boot.__cast(target , motion.actuators.GenericActuator)).stop(null,complete,sendEvent); else {
+			var library = motion.Actuate.getLibrary(target);
+			if(js.Boot.__instanceof(properties,String)) {
+				var temp = { };
+				Reflect.setField(temp,properties,null);
+				properties = temp;
+			} else if(js.Boot.__instanceof(properties,Array)) {
+				var temp = { };
+				var _g = 0, _g1 = js.Boot.__cast(properties , Array);
+				while(_g < _g1.length) {
+					var property = _g1[_g];
+					++_g;
+					Reflect.setField(temp,property,null);
+				}
+				properties = temp;
+			}
+			var i = library.length - 1;
+			while(i >= 0) {
+				library[i].stop(properties,complete,sendEvent);
+				i--;
+			}
+		}
+	}
+}
+motion.Actuate.timer = function(duration,customActuator) {
+	return motion.Actuate.tween(new motion._Actuate.TweenTimer(0),duration,new motion._Actuate.TweenTimer(1),false,customActuator);
+}
+motion.Actuate.transform = function(target,duration,overwrite) {
+	if(overwrite == null) overwrite = true;
+	if(duration == null) duration = 0;
+	return new motion._Actuate.TransformOptions(target,duration,overwrite);
+}
+motion.Actuate.tween = function(target,duration,properties,overwrite,customActuator) {
+	if(overwrite == null) overwrite = true;
+	if(target != null) {
+		if(duration > 0) {
+			if(customActuator == null) customActuator = motion.Actuate.defaultActuator;
+			var actuator = Type.createInstance(customActuator,[target,duration,properties]);
+			var library = motion.Actuate.getLibrary(actuator.target);
+			if(overwrite) {
+				var i = library.length - 1;
+				while(i >= 0) {
+					library[i].stop(actuator.properties,false,false);
+					i--;
+				}
+			}
+			library.push(actuator);
+			actuator.move();
+			return actuator;
+		} else return motion.Actuate.apply(target,properties,customActuator);
+	}
+	return null;
+}
+motion.Actuate.unload = function(actuator) {
+	var target = actuator.target;
+	if(motion.Actuate.targetLibraries.h.hasOwnProperty(target.__id__)) {
+		HxOverrides.remove(motion.Actuate.targetLibraries.h[target.__id__],actuator);
+		if(motion.Actuate.targetLibraries.h[target.__id__].length == 0) motion.Actuate.targetLibraries.remove(target);
+	}
+}
+motion.Actuate.update = function(target,duration,start,end,overwrite) {
+	if(overwrite == null) overwrite = true;
+	var properties = { start : start, end : end};
+	return motion.Actuate.tween(target,duration,properties,overwrite,motion.actuators.MethodActuator);
+}
+motion._Actuate = {}
+motion._Actuate.EffectsOptions = function(target,duration,overwrite) {
+	this.target = target;
+	this.duration = duration;
+	this.overwrite = overwrite;
+};
+$hxClasses["motion._Actuate.EffectsOptions"] = motion._Actuate.EffectsOptions;
+motion._Actuate.EffectsOptions.__name__ = ["motion","_Actuate","EffectsOptions"];
+motion._Actuate.EffectsOptions.prototype = {
+	filter: function(reference,properties) {
+		properties.filter = reference;
+		return motion.Actuate.tween(this.target,this.duration,properties,this.overwrite,motion.actuators.FilterActuator);
+	}
+	,__class__: motion._Actuate.EffectsOptions
+}
+motion._Actuate.TransformOptions = function(target,duration,overwrite) {
+	this.target = target;
+	this.duration = duration;
+	this.overwrite = overwrite;
+};
+$hxClasses["motion._Actuate.TransformOptions"] = motion._Actuate.TransformOptions;
+motion._Actuate.TransformOptions.__name__ = ["motion","_Actuate","TransformOptions"];
+motion._Actuate.TransformOptions.prototype = {
+	sound: function(volume,pan) {
+		var properties = { };
+		if(volume != null) properties.soundVolume = volume;
+		if(pan != null) properties.soundPan = pan;
+		return motion.Actuate.tween(this.target,this.duration,properties,this.overwrite,motion.actuators.TransformActuator);
+	}
+	,color: function(value,strength,alpha) {
+		if(strength == null) strength = 1;
+		if(value == null) value = 0;
+		var properties = { colorValue : value, colorStrength : strength};
+		if(alpha != null) properties.colorAlpha = alpha;
+		return motion.Actuate.tween(this.target,this.duration,properties,this.overwrite,motion.actuators.TransformActuator);
+	}
+	,__class__: motion._Actuate.TransformOptions
+}
+motion._Actuate.TweenTimer = function(progress) {
+	this.progress = progress;
+};
+$hxClasses["motion._Actuate.TweenTimer"] = motion._Actuate.TweenTimer;
+motion._Actuate.TweenTimer.__name__ = ["motion","_Actuate","TweenTimer"];
+motion._Actuate.TweenTimer.prototype = {
+	__class__: motion._Actuate.TweenTimer
+}
+motion.MotionPath = function() {
+	this._x = new motion.ComponentPath();
+	this._y = new motion.ComponentPath();
+};
+$hxClasses["motion.MotionPath"] = motion.MotionPath;
+motion.MotionPath.__name__ = ["motion","MotionPath"];
+motion.MotionPath.prototype = {
+	get_y: function() {
+		return this._y;
+	}
+	,get_x: function() {
+		return this._x;
+	}
+	,line: function(x,y,strength) {
+		if(strength == null) strength = 1;
+		this._x.addPath(new motion.LinearPath(x,strength));
+		this._y.addPath(new motion.LinearPath(y,strength));
+		return this;
+	}
+	,bezier: function(x,y,controlX,controlY,strength) {
+		if(strength == null) strength = 1;
+		this._x.addPath(new motion.BezierPath(x,controlX,strength));
+		this._y.addPath(new motion.BezierPath(y,controlY,strength));
+		return this;
+	}
+	,__class__: motion.MotionPath
+	,__properties__: {get_x:"get_x",get_y:"get_y"}
+}
+motion.IComponentPath = function() { }
+$hxClasses["motion.IComponentPath"] = motion.IComponentPath;
+motion.IComponentPath.__name__ = ["motion","IComponentPath"];
+motion.IComponentPath.prototype = {
+	__class__: motion.IComponentPath
+}
+motion.ComponentPath = function() {
+	this.paths = new Array();
+	this.start = 0;
+	this.totalStrength = 0;
+};
+$hxClasses["motion.ComponentPath"] = motion.ComponentPath;
+motion.ComponentPath.__name__ = ["motion","ComponentPath"];
+motion.ComponentPath.__interfaces__ = [motion.IComponentPath];
+motion.ComponentPath.prototype = {
+	get_end: function() {
+		if(this.paths.length > 0) {
+			var path = this.paths[this.paths.length - 1];
+			return path.end;
+		} else return this.start;
+	}
+	,calculate: function(k) {
+		if(this.paths.length == 1) return this.paths[0].calculate(this.start,k); else {
+			var ratio = k * this.totalStrength;
+			var lastEnd = this.start;
+			var _g = 0, _g1 = this.paths;
+			while(_g < _g1.length) {
+				var path = _g1[_g];
+				++_g;
+				if(ratio > path.strength) {
+					ratio -= path.strength;
+					lastEnd = path.end;
+				} else return path.calculate(lastEnd,ratio / path.strength);
+			}
+		}
+		return 0;
+	}
+	,addPath: function(path) {
+		this.paths.push(path);
+		this.totalStrength += path.strength;
+	}
+	,__class__: motion.ComponentPath
+	,__properties__: {get_end:"get_end"}
+}
+motion.BezierPath = function(end,control,strength) {
+	this.end = end;
+	this.control = control;
+	this.strength = strength;
+};
+$hxClasses["motion.BezierPath"] = motion.BezierPath;
+motion.BezierPath.__name__ = ["motion","BezierPath"];
+motion.BezierPath.prototype = {
+	calculate: function(start,k) {
+		return (1 - k) * (1 - k) * start + 2 * (1 - k) * k * this.control + k * k * this.end;
+	}
+	,__class__: motion.BezierPath
+}
+motion.LinearPath = function(end,strength) {
+	motion.BezierPath.call(this,end,0,strength);
+};
+$hxClasses["motion.LinearPath"] = motion.LinearPath;
+motion.LinearPath.__name__ = ["motion","LinearPath"];
+motion.LinearPath.__super__ = motion.BezierPath;
+motion.LinearPath.prototype = $extend(motion.BezierPath.prototype,{
+	calculate: function(start,k) {
+		return start + k * (this.end - start);
+	}
+	,__class__: motion.LinearPath
+});
+motion.actuators.FilterActuator = function(target,duration,properties) {
+	this.filterIndex = -1;
+	motion.actuators.SimpleActuator.call(this,target,duration,properties);
+	if(js.Boot.__instanceof(properties.filter,Class)) {
+		this.filterClass = properties.filter;
+		var _g = 0, _g1 = (js.Boot.__cast(target , flash.display.DisplayObject)).get_filters();
+		while(_g < _g1.length) {
+			var filter = _g1[_g];
+			++_g;
+			if(js.Boot.__instanceof(filter,this.filterClass)) this.filter = filter;
+		}
+	} else {
+		this.filterIndex = properties.filter;
+		this.filter = (js.Boot.__cast(target , flash.display.DisplayObject)).get_filters()[this.filterIndex];
+	}
+};
+$hxClasses["motion.actuators.FilterActuator"] = motion.actuators.FilterActuator;
+motion.actuators.FilterActuator.__name__ = ["motion","actuators","FilterActuator"];
+motion.actuators.FilterActuator.__super__ = motion.actuators.SimpleActuator;
+motion.actuators.FilterActuator.prototype = $extend(motion.actuators.SimpleActuator.prototype,{
+	update: function(currentTime) {
+		motion.actuators.SimpleActuator.prototype.update.call(this,currentTime);
+		var filters = (js.Boot.__cast(this.target , flash.display.DisplayObject)).get_filters();
+		if(this.filterIndex > -1) Reflect.setField(filters,this.properties.filter,this.filter); else {
+			var _g1 = 0, _g = filters.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				if(js.Boot.__instanceof(filters[i],this.filterClass)) filters[i] = this.filter;
+			}
+		}
+		this.target.filters = filters;
+	}
+	,initialize: function() {
+		var details;
+		var start;
+		var _g = 0, _g1 = Reflect.fields(this.properties);
+		while(_g < _g1.length) {
+			var propertyName = _g1[_g];
+			++_g;
+			if(propertyName != "filter") {
+				start = Reflect.field(this.filter,propertyName);
+				details = new motion.actuators.PropertyDetails(this.filter,propertyName,start,Reflect.field(this.properties,propertyName) - start);
+				this.propertyDetails.push(details);
+			}
+		}
+		this.detailsLength = this.propertyDetails.length;
+		this.initialized = true;
+	}
+	,apply: function() {
+		var _g = 0, _g1 = Reflect.fields(this.properties);
+		while(_g < _g1.length) {
+			var propertyName = _g1[_g];
+			++_g;
+			if(propertyName != "filter") this.filter[propertyName] = Reflect.field(this.properties,propertyName);
+		}
+		var filters = this.target.filters;
+		Reflect.setField(filters,this.properties.filter,this.filter);
+		this.target.filters = filters;
+	}
+	,__class__: motion.actuators.FilterActuator
+});
+motion.actuators.MethodActuator = function(target,duration,properties) {
+	this.currentParameters = new Array();
+	this.tweenProperties = { };
+	motion.actuators.SimpleActuator.call(this,target,duration,properties);
+	if(!Reflect.hasField(properties,"start")) this.properties.start = new Array();
+	if(!Reflect.hasField(properties,"end")) this.properties.end = this.properties.start;
+	var _g1 = 0, _g = this.properties.start.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		this.currentParameters.push(null);
+	}
+};
+$hxClasses["motion.actuators.MethodActuator"] = motion.actuators.MethodActuator;
+motion.actuators.MethodActuator.__name__ = ["motion","actuators","MethodActuator"];
+motion.actuators.MethodActuator.__super__ = motion.actuators.SimpleActuator;
+motion.actuators.MethodActuator.prototype = $extend(motion.actuators.SimpleActuator.prototype,{
+	update: function(currentTime) {
+		motion.actuators.SimpleActuator.prototype.update.call(this,currentTime);
+		if(this.active) {
+			var _g1 = 0, _g = this.properties.start.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				this.currentParameters[i] = Reflect.field(this.tweenProperties,"param" + i);
+			}
+			this.target.apply(null,this.currentParameters);
+		}
+	}
+	,initialize: function() {
+		var details;
+		var propertyName;
+		var start;
+		var _g1 = 0, _g = this.properties.start.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			propertyName = "param" + i;
+			start = this.properties.start[i];
+			this.tweenProperties[propertyName] = start;
+			if(js.Boot.__instanceof(start,Float) || js.Boot.__instanceof(start,Int)) {
+				details = new motion.actuators.PropertyDetails(this.tweenProperties,propertyName,start,this.properties.end[i] - start);
+				this.propertyDetails.push(details);
+			}
+		}
+		this.detailsLength = this.propertyDetails.length;
+		this.initialized = true;
+	}
+	,complete: function(sendEvent) {
+		if(sendEvent == null) sendEvent = true;
+		var _g1 = 0, _g = this.properties.start.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this.currentParameters[i] = Reflect.field(this.tweenProperties,"param" + i);
+		}
+		this.target.apply(null,this.currentParameters);
+		motion.actuators.SimpleActuator.prototype.complete.call(this,sendEvent);
+	}
+	,apply: function() {
+		Reflect.callMethod(null,this.target,this.properties.end);
+	}
+	,__class__: motion.actuators.MethodActuator
+});
+motion.actuators.MotionPathActuator = function(target,duration,properties) {
+	motion.actuators.SimpleActuator.call(this,target,duration,properties);
+};
+$hxClasses["motion.actuators.MotionPathActuator"] = motion.actuators.MotionPathActuator;
+motion.actuators.MotionPathActuator.__name__ = ["motion","actuators","MotionPathActuator"];
+motion.actuators.MotionPathActuator.__super__ = motion.actuators.SimpleActuator;
+motion.actuators.MotionPathActuator.prototype = $extend(motion.actuators.SimpleActuator.prototype,{
+	update: function(currentTime) {
+		if(!this.paused) {
+			var details;
+			var easing;
+			var tweenPosition = (currentTime - this.timeOffset) / this.duration;
+			if(tweenPosition > 1) tweenPosition = 1;
+			if(!this.initialized) this.initialize();
+			if(!this.special) {
+				easing = this._ease.calculate(tweenPosition);
+				var _g = 0, _g1 = this.propertyDetails;
+				while(_g < _g1.length) {
+					var details1 = _g1[_g];
+					++_g;
+					if(details1.isField) details1.target[details1.propertyName] = (js.Boot.__cast(details1 , motion.actuators.PropertyPathDetails)).path.calculate(easing); else Reflect.setProperty(details1.target,details1.propertyName,(js.Boot.__cast(details1 , motion.actuators.PropertyPathDetails)).path.calculate(easing));
+				}
+			} else {
+				if(!this._reverse) easing = this._ease.calculate(tweenPosition); else easing = this._ease.calculate(1 - tweenPosition);
+				var endValue;
+				var _g = 0, _g1 = this.propertyDetails;
+				while(_g < _g1.length) {
+					var details1 = _g1[_g];
+					++_g;
+					if(!this._snapping) {
+						if(details1.isField) details1.target[details1.propertyName] = (js.Boot.__cast(details1 , motion.actuators.PropertyPathDetails)).path.calculate(easing); else Reflect.setProperty(details1.target,details1.propertyName,(js.Boot.__cast(details1 , motion.actuators.PropertyPathDetails)).path.calculate(easing));
+					} else if(details1.isField) details1.target[details1.propertyName] = Math.round((js.Boot.__cast(details1 , motion.actuators.PropertyPathDetails)).path.calculate(easing)); else Reflect.setProperty(details1.target,details1.propertyName,Math.round((js.Boot.__cast(details1 , motion.actuators.PropertyPathDetails)).path.calculate(easing)));
+				}
+			}
+			if(tweenPosition == 1) {
+				if(this._repeat == 0) {
+					this.active = false;
+					if(this.toggleVisible && this.target.alpha == 0) this.target.visible = false;
+					this.complete(true);
+					return;
+				} else {
+					if(this._reflect) this._reverse = !this._reverse;
+					this.startTime = currentTime;
+					this.timeOffset = this.startTime + this._delay;
+					if(this._repeat > 0) this._repeat--;
+				}
+			}
+			if(this.sendChange) this.change();
+		}
+	}
+	,initialize: function() {
+		var details;
+		var path;
+		var _g = 0, _g1 = Reflect.fields(this.properties);
+		while(_g < _g1.length) {
+			var propertyName = _g1[_g];
+			++_g;
+			path = js.Boot.__cast(Reflect.field(this.properties,propertyName) , motion.IComponentPath);
+			if(path != null) {
+				var isField = true;
+				if(Reflect.hasField(this.target,propertyName)) path.start = Reflect.field(this.target,propertyName); else {
+					isField = false;
+					path.start = Reflect.getProperty(this.target,propertyName);
+				}
+				details = new motion.actuators.PropertyPathDetails(this.target,propertyName,path,isField);
+				this.propertyDetails.push(details);
+			}
+		}
+		this.detailsLength = this.propertyDetails.length;
+		this.initialized = true;
+	}
+	,apply: function() {
+		var _g = 0, _g1 = Reflect.fields(this.properties);
+		while(_g < _g1.length) {
+			var propertyName = _g1[_g];
+			++_g;
+			if(Reflect.hasField(this.target,propertyName)) this.target[propertyName] = (js.Boot.__cast(Reflect.field(this.properties,propertyName) , motion.IComponentPath)).get_end(); else Reflect.setProperty(this.target,propertyName,(js.Boot.__cast(Reflect.field(this.properties,propertyName) , motion.IComponentPath)).get_end());
+		}
+	}
+	,__class__: motion.actuators.MotionPathActuator
+});
+motion.actuators.PropertyDetails = function(target,propertyName,start,change,isField) {
+	if(isField == null) isField = true;
+	this.target = target;
+	this.propertyName = propertyName;
+	this.start = start;
+	this.change = change;
+	this.isField = isField;
+};
+$hxClasses["motion.actuators.PropertyDetails"] = motion.actuators.PropertyDetails;
+motion.actuators.PropertyDetails.__name__ = ["motion","actuators","PropertyDetails"];
+motion.actuators.PropertyDetails.prototype = {
+	__class__: motion.actuators.PropertyDetails
+}
+motion.actuators.PropertyPathDetails = function(target,propertyName,path,isField) {
+	if(isField == null) isField = true;
+	motion.actuators.PropertyDetails.call(this,target,propertyName,0,0,isField);
+	this.path = path;
+};
+$hxClasses["motion.actuators.PropertyPathDetails"] = motion.actuators.PropertyPathDetails;
+motion.actuators.PropertyPathDetails.__name__ = ["motion","actuators","PropertyPathDetails"];
+motion.actuators.PropertyPathDetails.__super__ = motion.actuators.PropertyDetails;
+motion.actuators.PropertyPathDetails.prototype = $extend(motion.actuators.PropertyDetails.prototype,{
+	__class__: motion.actuators.PropertyPathDetails
+});
+motion.actuators.TransformActuator = function(target,duration,properties) {
+	motion.actuators.SimpleActuator.call(this,target,duration,properties);
+};
+$hxClasses["motion.actuators.TransformActuator"] = motion.actuators.TransformActuator;
+motion.actuators.TransformActuator.__name__ = ["motion","actuators","TransformActuator"];
+motion.actuators.TransformActuator.__super__ = motion.actuators.SimpleActuator;
+motion.actuators.TransformActuator.prototype = $extend(motion.actuators.SimpleActuator.prototype,{
+	update: function(currentTime) {
+		motion.actuators.SimpleActuator.prototype.update.call(this,currentTime);
+		if(this.endColorTransform != null) this.target.transform.colorTransform = this.tweenColorTransform;
+		if(this.endSoundTransform != null) this.target.soundTransform = this.tweenSoundTransform;
+	}
+	,initializeSound: function() {
+		if(this.target.soundTransform == null) this.target.soundTransform = new flash.media.SoundTransform();
+		var start = this.target.soundTransform;
+		this.endSoundTransform = this.target.soundTransform;
+		this.tweenSoundTransform = new flash.media.SoundTransform();
+		if(Reflect.hasField(this.properties,"soundVolume")) {
+			this.endSoundTransform.volume = this.properties.soundVolume;
+			this.propertyDetails.push(new motion.actuators.PropertyDetails(this.tweenSoundTransform,"volume",start.volume,this.endSoundTransform.volume - start.volume));
+		}
+		if(Reflect.hasField(this.properties,"soundPan")) {
+			this.endSoundTransform.pan = this.properties.soundPan;
+			this.propertyDetails.push(new motion.actuators.PropertyDetails(this.tweenSoundTransform,"pan",start.pan,this.endSoundTransform.pan - start.pan));
+		}
+	}
+	,initializeColor: function() {
+		this.endColorTransform = new flash.geom.ColorTransform();
+		var color = this.properties.colorValue;
+		var strength = this.properties.colorStrength;
+		if(strength < 1) {
+			var multiplier;
+			var offset;
+			if(strength < 0.5) {
+				multiplier = 1;
+				offset = strength * 2;
+			} else {
+				multiplier = 1 - (strength - 0.5) * 2;
+				offset = 1;
+			}
+			this.endColorTransform.redMultiplier = multiplier;
+			this.endColorTransform.greenMultiplier = multiplier;
+			this.endColorTransform.blueMultiplier = multiplier;
+			this.endColorTransform.redOffset = offset * (color >> 16 & 255);
+			this.endColorTransform.greenOffset = offset * (color >> 8 & 255);
+			this.endColorTransform.blueOffset = offset * (color & 255);
+		} else {
+			this.endColorTransform.redMultiplier = 0;
+			this.endColorTransform.greenMultiplier = 0;
+			this.endColorTransform.blueMultiplier = 0;
+			this.endColorTransform.redOffset = color >> 16 & 255;
+			this.endColorTransform.greenOffset = color >> 8 & 255;
+			this.endColorTransform.blueOffset = color & 255;
+		}
+		var propertyNames = ["redMultiplier","greenMultiplier","blueMultiplier","redOffset","greenOffset","blueOffset"];
+		if(Reflect.hasField(this.properties,"colorAlpha")) {
+			this.endColorTransform.alphaMultiplier = this.properties.colorAlpha;
+			propertyNames.push("alphaMultiplier");
+		} else this.endColorTransform.alphaMultiplier = this.target.alpha;
+		var begin = this.target.transform.colorTransform;
+		this.tweenColorTransform = new flash.geom.ColorTransform();
+		var details;
+		var start;
+		var _g = 0;
+		while(_g < propertyNames.length) {
+			var propertyName = propertyNames[_g];
+			++_g;
+			start = Reflect.field(begin,propertyName);
+			details = new motion.actuators.PropertyDetails(this.tweenColorTransform,propertyName,start,Reflect.field(this.endColorTransform,propertyName) - start);
+			this.propertyDetails.push(details);
+		}
+	}
+	,initialize: function() {
+		if(Reflect.hasField(this.properties,"colorValue") && js.Boot.__instanceof(this.target,flash.display.DisplayObject)) this.initializeColor();
+		if(Reflect.hasField(this.properties,"soundVolume") || Reflect.hasField(this.properties,"soundPan")) this.initializeSound();
+		this.detailsLength = this.propertyDetails.length;
+		this.initialized = true;
+	}
+	,apply: function() {
+		this.initialize();
+		if(this.endColorTransform != null) this.target.transform.colorTransform = this.endColorTransform;
+		if(this.endSoundTransform != null) this.target.soundTransform = this.endSoundTransform;
+	}
+	,__class__: motion.actuators.TransformActuator
+});
+motion.easing.Cubic = function() { }
+$hxClasses["motion.easing.Cubic"] = motion.easing.Cubic;
+motion.easing.Cubic.__name__ = ["motion","easing","Cubic"];
+motion.easing.Cubic.__properties__ = {get_easeOut:"get_easeOut",get_easeInOut:"get_easeInOut",get_easeIn:"get_easeIn"}
+motion.easing.Cubic.get_easeIn = function() {
+	return new motion.easing.CubicEaseIn();
+}
+motion.easing.Cubic.get_easeInOut = function() {
+	return new motion.easing.CubicEaseInOut();
+}
+motion.easing.Cubic.get_easeOut = function() {
+	return new motion.easing.CubicEaseOut();
+}
+motion.easing.CubicEaseIn = function() {
+};
+$hxClasses["motion.easing.CubicEaseIn"] = motion.easing.CubicEaseIn;
+motion.easing.CubicEaseIn.__name__ = ["motion","easing","CubicEaseIn"];
+motion.easing.CubicEaseIn.__interfaces__ = [motion.easing.IEasing];
+motion.easing.CubicEaseIn.prototype = {
+	ease: function(t,b,c,d) {
+		return c * (t /= d) * t * t + b;
+	}
+	,calculate: function(k) {
+		return k * k * k;
+	}
+	,__class__: motion.easing.CubicEaseIn
+}
+motion.easing.CubicEaseInOut = function() {
+};
+$hxClasses["motion.easing.CubicEaseInOut"] = motion.easing.CubicEaseInOut;
+motion.easing.CubicEaseInOut.__name__ = ["motion","easing","CubicEaseInOut"];
+motion.easing.CubicEaseInOut.__interfaces__ = [motion.easing.IEasing];
+motion.easing.CubicEaseInOut.prototype = {
+	ease: function(t,b,c,d) {
+		return (t /= d / 2) < 1?c / 2 * t * t * t + b:c / 2 * ((t -= 2) * t * t + 2) + b;
+	}
+	,calculate: function(k) {
+		return (k /= 0.5) < 1?0.5 * k * k * k:0.5 * ((k -= 2) * k * k + 2);
+	}
+	,__class__: motion.easing.CubicEaseInOut
+}
+motion.easing.CubicEaseOut = function() {
+};
+$hxClasses["motion.easing.CubicEaseOut"] = motion.easing.CubicEaseOut;
+motion.easing.CubicEaseOut.__name__ = ["motion","easing","CubicEaseOut"];
+motion.easing.CubicEaseOut.__interfaces__ = [motion.easing.IEasing];
+motion.easing.CubicEaseOut.prototype = {
+	ease: function(t,b,c,d) {
+		return c * ((t = t / d - 1) * t * t + 1) + b;
+	}
+	,calculate: function(k) {
+		return --k * k * k + 1;
+	}
+	,__class__: motion.easing.CubicEaseOut
+}
+motion.easing.ExpoEaseIn = function() {
+};
+$hxClasses["motion.easing.ExpoEaseIn"] = motion.easing.ExpoEaseIn;
+motion.easing.ExpoEaseIn.__name__ = ["motion","easing","ExpoEaseIn"];
+motion.easing.ExpoEaseIn.__interfaces__ = [motion.easing.IEasing];
+motion.easing.ExpoEaseIn.prototype = {
+	ease: function(t,b,c,d) {
+		return t == 0?b:c * Math.pow(2,10 * (t / d - 1)) + b;
+	}
+	,calculate: function(k) {
+		return k == 0?0:Math.pow(2,10 * (k - 1));
+	}
+	,__class__: motion.easing.ExpoEaseIn
+}
+motion.easing.ExpoEaseInOut = function() {
+};
+$hxClasses["motion.easing.ExpoEaseInOut"] = motion.easing.ExpoEaseInOut;
+motion.easing.ExpoEaseInOut.__name__ = ["motion","easing","ExpoEaseInOut"];
+motion.easing.ExpoEaseInOut.__interfaces__ = [motion.easing.IEasing];
+motion.easing.ExpoEaseInOut.prototype = {
+	ease: function(t,b,c,d) {
+		if(t == 0) return b;
+		if(t == d) return b + c;
+		if((t /= d / 2.0) < 1.0) return c / 2 * Math.pow(2,10 * (t - 1)) + b;
+		return c / 2 * (2 - Math.pow(2,-10 * --t)) + b;
+	}
+	,calculate: function(k) {
+		if(k == 0) return 0;
+		if(k == 1) return 1;
+		if((k /= 0.5) < 1.0) return 0.5 * Math.pow(2,10 * (k - 1));
+		return 0.5 * (2 - Math.pow(2,-10 * --k));
+	}
+	,__class__: motion.easing.ExpoEaseInOut
+}
 var openfl = {}
 openfl.display = {}
 openfl.display.Tilesheet = function(image) {
@@ -9934,6 +11044,12 @@ haxe.Unserializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
 haxe.ds.ObjectMap.count = 0;
 js.Browser.window = typeof window != "undefined" ? window : null;
 js.Browser.document = typeof window != "undefined" ? window.document : null;
+motion.actuators.SimpleActuator.actuators = new Array();
+motion.actuators.SimpleActuator.actuatorsLength = 0;
+motion.actuators.SimpleActuator.addedEvent = false;
+motion.Actuate.defaultActuator = motion.actuators.SimpleActuator;
+motion.Actuate.defaultEase = motion.easing.Expo.get_easeOut();
+motion.Actuate.targetLibraries = new haxe.ds.ObjectMap();
 openfl.display.Tilesheet.TILE_SCALE = 1;
 openfl.display.Tilesheet.TILE_ROTATION = 2;
 openfl.display.Tilesheet.TILE_RGB = 4;

@@ -71,14 +71,14 @@ hx::Object *View_obj::__ToInterface(const hx::type_info &inType) {
 }
 
 Float View_obj::set_sizeHeight( Float value){
-	HX_STACK_PUSH("View::set_sizeHeight","com/gamekit/mvc/view/View.hx",166);
+	HX_STACK_PUSH("View::set_sizeHeight","com/gamekit/mvc/view/View.hx",168);
 	HX_STACK_THIS(this);
 	HX_STACK_ARG(value,"value");
-	HX_STACK_LINE(167)
-	this->_sizeHeight = value;
 	HX_STACK_LINE(169)
-	this->_resize();
+	this->_sizeHeight = value;
 	HX_STACK_LINE(171)
+	this->_resize();
+	HX_STACK_LINE(173)
 	return this->_sizeHeight;
 }
 
@@ -86,9 +86,9 @@ Float View_obj::set_sizeHeight( Float value){
 HX_DEFINE_DYNAMIC_FUNC1(View_obj,set_sizeHeight,return )
 
 Float View_obj::get_sizeHeight( ){
-	HX_STACK_PUSH("View::get_sizeHeight","com/gamekit/mvc/view/View.hx",161);
+	HX_STACK_PUSH("View::get_sizeHeight","com/gamekit/mvc/view/View.hx",163);
 	HX_STACK_THIS(this);
-	HX_STACK_LINE(161)
+	HX_STACK_LINE(163)
 	return this->_sizeHeight;
 }
 
@@ -96,14 +96,14 @@ Float View_obj::get_sizeHeight( ){
 HX_DEFINE_DYNAMIC_FUNC0(View_obj,get_sizeHeight,return )
 
 Float View_obj::set_sizeWidth( Float value){
-	HX_STACK_PUSH("View::set_sizeWidth","com/gamekit/mvc/view/View.hx",147);
+	HX_STACK_PUSH("View::set_sizeWidth","com/gamekit/mvc/view/View.hx",149);
 	HX_STACK_THIS(this);
 	HX_STACK_ARG(value,"value");
-	HX_STACK_LINE(148)
-	this->_sizeWidth = value;
 	HX_STACK_LINE(150)
-	this->_resize();
+	this->_sizeWidth = value;
 	HX_STACK_LINE(152)
+	this->_resize();
+	HX_STACK_LINE(154)
 	return this->_sizeWidth;
 }
 
@@ -111,9 +111,9 @@ Float View_obj::set_sizeWidth( Float value){
 HX_DEFINE_DYNAMIC_FUNC1(View_obj,set_sizeWidth,return )
 
 Float View_obj::get_sizeWidth( ){
-	HX_STACK_PUSH("View::get_sizeWidth","com/gamekit/mvc/view/View.hx",142);
+	HX_STACK_PUSH("View::get_sizeWidth","com/gamekit/mvc/view/View.hx",144);
 	HX_STACK_THIS(this);
-	HX_STACK_LINE(142)
+	HX_STACK_LINE(144)
 	return this->_sizeWidth;
 }
 
@@ -121,28 +121,28 @@ Float View_obj::get_sizeWidth( ){
 HX_DEFINE_DYNAMIC_FUNC0(View_obj,get_sizeWidth,return )
 
 ::com::gamekit::mvc::model::Model View_obj::set_model( ::com::gamekit::mvc::model::Model value){
-	HX_STACK_PUSH("View::set_model","com/gamekit/mvc/view/View.hx",113);
+	HX_STACK_PUSH("View::set_model","com/gamekit/mvc/view/View.hx",115);
 	HX_STACK_THIS(this);
 	HX_STACK_ARG(value,"value");
-	HX_STACK_LINE(114)
+	HX_STACK_LINE(116)
 	if (((this->_model != value))){
-		HX_STACK_LINE(116)
-		this->_dismissModel();
 		HX_STACK_LINE(118)
-		this->_model = value;
+		this->_dismissModel();
 		HX_STACK_LINE(120)
+		this->_model = value;
+		HX_STACK_LINE(122)
 		if (((this->_model != null()))){
-			HX_STACK_LINE(123)
-			this->_model->addEventListener(::flash::events::Event_obj::CHANGE,this->_onModelChange_dyn(),null(),null(),null());
 			HX_STACK_LINE(125)
+			this->_model->addEventListener(::flash::events::Event_obj::CHANGE,this->_onModelChange_dyn(),null(),null(),null());
+			HX_STACK_LINE(127)
 			this->_applyModel();
 		}
 		else{
-			HX_STACK_LINE(128)
+			HX_STACK_LINE(130)
 			this->_clear();
 		}
 	}
-	HX_STACK_LINE(133)
+	HX_STACK_LINE(135)
 	return this->_model;
 }
 
@@ -150,9 +150,9 @@ HX_DEFINE_DYNAMIC_FUNC0(View_obj,get_sizeWidth,return )
 HX_DEFINE_DYNAMIC_FUNC1(View_obj,set_model,return )
 
 ::com::gamekit::mvc::model::Model View_obj::get_model( ){
-	HX_STACK_PUSH("View::get_model","com/gamekit/mvc/view/View.hx",108);
+	HX_STACK_PUSH("View::get_model","com/gamekit/mvc/view/View.hx",110);
 	HX_STACK_THIS(this);
-	HX_STACK_LINE(108)
+	HX_STACK_LINE(110)
 	return this->_model;
 }
 
@@ -161,10 +161,10 @@ HX_DEFINE_DYNAMIC_FUNC0(View_obj,get_model,return )
 
 Void View_obj::_onModelChange( ::flash::events::Event e){
 {
-		HX_STACK_PUSH("View::_onModelChange","com/gamekit/mvc/view/View.hx",101);
+		HX_STACK_PUSH("View::_onModelChange","com/gamekit/mvc/view/View.hx",103);
 		HX_STACK_THIS(this);
 		HX_STACK_ARG(e,"e");
-		HX_STACK_LINE(101)
+		HX_STACK_LINE(103)
 		this->_applyModel();
 	}
 return null();
@@ -175,14 +175,14 @@ HX_DEFINE_DYNAMIC_FUNC1(View_obj,_onModelChange,(void))
 
 Void View_obj::_dismissModel( ){
 {
-		HX_STACK_PUSH("View::_dismissModel","com/gamekit/mvc/view/View.hx",89);
+		HX_STACK_PUSH("View::_dismissModel","com/gamekit/mvc/view/View.hx",91);
 		HX_STACK_THIS(this);
-		HX_STACK_LINE(90)
+		HX_STACK_LINE(92)
 		if (((this->_model != null()))){
-			HX_STACK_LINE(91)
+			HX_STACK_LINE(93)
 			this->_model->removeEventListener(::flash::events::Event_obj::CHANGE,this->_onModelChange_dyn(),null());
 		}
-		HX_STACK_LINE(95)
+		HX_STACK_LINE(97)
 		this->_model = null();
 	}
 return null();
@@ -193,7 +193,7 @@ HX_DEFINE_DYNAMIC_FUNC0(View_obj,_dismissModel,(void))
 
 Void View_obj::_applyModel( ){
 {
-		HX_STACK_PUSH("View::_applyModel","com/gamekit/mvc/view/View.hx",81);
+		HX_STACK_PUSH("View::_applyModel","com/gamekit/mvc/view/View.hx",83);
 		HX_STACK_THIS(this);
 	}
 return null();
@@ -204,7 +204,7 @@ HX_DEFINE_DYNAMIC_FUNC0(View_obj,_applyModel,(void))
 
 Void View_obj::_clear( ){
 {
-		HX_STACK_PUSH("View::_clear","com/gamekit/mvc/view/View.hx",73);
+		HX_STACK_PUSH("View::_clear","com/gamekit/mvc/view/View.hx",75);
 		HX_STACK_THIS(this);
 	}
 return null();
@@ -215,7 +215,7 @@ HX_DEFINE_DYNAMIC_FUNC0(View_obj,_clear,(void))
 
 Void View_obj::_resize( ){
 {
-		HX_STACK_PUSH("View::_resize","com/gamekit/mvc/view/View.hx",65);
+		HX_STACK_PUSH("View::_resize","com/gamekit/mvc/view/View.hx",67);
 		HX_STACK_THIS(this);
 	}
 return null();
@@ -226,15 +226,15 @@ HX_DEFINE_DYNAMIC_FUNC0(View_obj,_resize,(void))
 
 Void View_obj::setSize( Float width,Float height){
 {
-		HX_STACK_PUSH("View::setSize","com/gamekit/mvc/view/View.hx",52);
+		HX_STACK_PUSH("View::setSize","com/gamekit/mvc/view/View.hx",54);
 		HX_STACK_THIS(this);
 		HX_STACK_ARG(width,"width");
 		HX_STACK_ARG(height,"height");
-		HX_STACK_LINE(53)
+		HX_STACK_LINE(55)
 		this->_sizeWidth = width;
-		HX_STACK_LINE(54)
-		this->_sizeHeight = height;
 		HX_STACK_LINE(56)
+		this->_sizeHeight = height;
+		HX_STACK_LINE(58)
 		this->_resize();
 	}
 return null();
@@ -257,9 +257,11 @@ Void View_obj::destroy( ){
 			HX_STACK_LINE(35)
 			this->removeChildAt((int)0);
 		}
-		HX_STACK_LINE(40)
+		HX_STACK_LINE(39)
+		this->_clear();
+		HX_STACK_LINE(42)
 		this->_dismissModel();
-		HX_STACK_LINE(43)
+		HX_STACK_LINE(45)
 		this->_model = null();
 	}
 return null();

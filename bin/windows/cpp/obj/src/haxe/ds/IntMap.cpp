@@ -38,6 +38,18 @@ hx::Object *IntMap_obj::__ToInterface(const hx::type_info &inType) {
 	return super::__ToInterface(inType);
 }
 
+Dynamic IntMap_obj::iterator( ){
+	HX_STACK_PUSH("IntMap::iterator","C:\\HaxeToolkit\\haxe/std/cpp/_std/haxe/ds/IntMap.hx",53);
+	HX_STACK_THIS(this);
+	HX_STACK_LINE(54)
+	Dynamic a = ::__int_hash_values(this->h);		HX_STACK_VAR(a,"a");
+	HX_STACK_LINE(55)
+	return a->__Field(HX_CSTRING("iterator"),true)();
+}
+
+
+HX_DEFINE_DYNAMIC_FUNC0(IntMap_obj,iterator,return )
+
 bool IntMap_obj::remove( int key){
 	HX_STACK_PUSH("IntMap::remove","C:\\HaxeToolkit\\haxe/std/cpp/_std/haxe/ds/IntMap.hx",44);
 	HX_STACK_THIS(this);
@@ -48,6 +60,17 @@ bool IntMap_obj::remove( int key){
 
 
 HX_DEFINE_DYNAMIC_FUNC1(IntMap_obj,remove,return )
+
+bool IntMap_obj::exists( int key){
+	HX_STACK_PUSH("IntMap::exists","C:\\HaxeToolkit\\haxe/std/cpp/_std/haxe/ds/IntMap.hx",40);
+	HX_STACK_THIS(this);
+	HX_STACK_ARG(key,"key");
+	HX_STACK_LINE(40)
+	return ::__int_hash_exists(this->h,key);
+}
+
+
+HX_DEFINE_DYNAMIC_FUNC1(IntMap_obj,exists,return )
 
 Dynamic IntMap_obj::get( int key){
 	HX_STACK_PUSH("IntMap::get","C:\\HaxeToolkit\\haxe/std/cpp/_std/haxe/ds/IntMap.hx",36);
@@ -104,6 +127,10 @@ Dynamic IntMap_obj::__Field(const ::String &inName,bool inCallProp)
 		break;
 	case 6:
 		if (HX_FIELD_EQ(inName,"remove") ) { return remove_dyn(); }
+		if (HX_FIELD_EQ(inName,"exists") ) { return exists_dyn(); }
+		break;
+	case 8:
+		if (HX_FIELD_EQ(inName,"iterator") ) { return iterator_dyn(); }
 	}
 	return super::__Field(inName,inCallProp);
 }
@@ -127,7 +154,9 @@ static ::String sStaticFields[] = {
 	String(null()) };
 
 static ::String sMemberFields[] = {
+	HX_CSTRING("iterator"),
 	HX_CSTRING("remove"),
+	HX_CSTRING("exists"),
 	HX_CSTRING("get"),
 	HX_CSTRING("set"),
 	HX_CSTRING("h"),

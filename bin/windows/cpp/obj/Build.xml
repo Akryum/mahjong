@@ -95,6 +95,202 @@
    <depend name="include/haxe/ds/StringMap.h"/>
    <depend name="include/nme/AssetData.h"/>
   </file>
+  <file name="src/motion/easing/ExpoEaseInOut.cpp">
+   <depend name="include/motion/easing/ExpoEaseInOut.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/easing/ExpoEaseIn.cpp">
+   <depend name="include/motion/easing/ExpoEaseIn.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/easing/CubicEaseOut.cpp">
+   <depend name="include/motion/easing/CubicEaseOut.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/easing/CubicEaseInOut.cpp">
+   <depend name="include/motion/easing/CubicEaseInOut.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/easing/CubicEaseIn.cpp">
+   <depend name="include/motion/easing/CubicEaseIn.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/easing/Cubic.cpp">
+   <depend name="include/motion/easing/Cubic.h"/>
+   <depend name="include/motion/easing/CubicEaseIn.h"/>
+   <depend name="include/motion/easing/CubicEaseInOut.h"/>
+   <depend name="include/motion/easing/CubicEaseOut.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/actuators/TransformActuator.cpp">
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/flash/display/DisplayObject.h"/>
+   <depend name="include/flash/display/IBitmapDrawable.h"/>
+   <depend name="include/flash/events/EventDispatcher.h"/>
+   <depend name="include/flash/events/IEventDispatcher.h"/>
+   <depend name="include/flash/geom/ColorTransform.h"/>
+   <depend name="include/flash/media/SoundTransform.h"/>
+   <depend name="include/motion/actuators/GenericActuator.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/actuators/PropertyDetails.h"/>
+   <depend name="include/motion/actuators/SimpleActuator.h"/>
+   <depend name="include/motion/actuators/TransformActuator.h"/>
+  </file>
+  <file name="src/motion/actuators/PropertyPathDetails.cpp">
+   <depend name="include/motion/IComponentPath.h"/>
+   <depend name="include/motion/actuators/PropertyDetails.h"/>
+   <depend name="include/motion/actuators/PropertyPathDetails.h"/>
+  </file>
+  <file name="src/motion/actuators/PropertyDetails.cpp">
+   <depend name="include/motion/actuators/PropertyDetails.h"/>
+  </file>
+  <file name="src/motion/actuators/MotionPathActuator.cpp">
+   <depend name="include/Reflect.h"/>
+   <depend name="include/motion/IComponentPath.h"/>
+   <depend name="include/motion/actuators/GenericActuator.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/actuators/MotionPathActuator.h"/>
+   <depend name="include/motion/actuators/PropertyDetails.h"/>
+   <depend name="include/motion/actuators/PropertyPathDetails.h"/>
+   <depend name="include/motion/actuators/SimpleActuator.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/actuators/MethodActuator.cpp">
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/motion/actuators/GenericActuator.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/actuators/MethodActuator.h"/>
+   <depend name="include/motion/actuators/PropertyDetails.h"/>
+   <depend name="include/motion/actuators/SimpleActuator.h"/>
+  </file>
+  <file name="src/motion/actuators/FilterActuator.cpp">
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/flash/display/DisplayObject.h"/>
+   <depend name="include/flash/display/IBitmapDrawable.h"/>
+   <depend name="include/flash/events/EventDispatcher.h"/>
+   <depend name="include/flash/events/IEventDispatcher.h"/>
+   <depend name="include/flash/filters/BitmapFilter.h"/>
+   <depend name="include/motion/actuators/FilterActuator.h"/>
+   <depend name="include/motion/actuators/GenericActuator.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/actuators/PropertyDetails.h"/>
+   <depend name="include/motion/actuators/SimpleActuator.h"/>
+  </file>
+  <file name="src/motion/LinearPath.cpp">
+   <depend name="include/motion/BezierPath.h"/>
+   <depend name="include/motion/LinearPath.h"/>
+  </file>
+  <file name="src/motion/BezierPath.cpp">
+   <depend name="include/motion/BezierPath.h"/>
+  </file>
+  <file name="src/motion/ComponentPath.cpp">
+   <depend name="include/motion/BezierPath.h"/>
+   <depend name="include/motion/ComponentPath.h"/>
+   <depend name="include/motion/IComponentPath.h"/>
+  </file>
+  <file name="src/motion/IComponentPath.cpp">
+   <depend name="include/motion/IComponentPath.h"/>
+  </file>
+  <file name="src/motion/MotionPath.cpp">
+   <depend name="include/motion/BezierPath.h"/>
+   <depend name="include/motion/ComponentPath.h"/>
+   <depend name="include/motion/IComponentPath.h"/>
+   <depend name="include/motion/LinearPath.h"/>
+   <depend name="include/motion/MotionPath.h"/>
+  </file>
+  <file name="src/motion/_Actuate/TweenTimer.cpp">
+   <depend name="include/motion/_Actuate/TweenTimer.h"/>
+  </file>
+  <file name="src/motion/_Actuate/TransformOptions.cpp">
+   <depend name="include/motion/Actuate.h"/>
+   <depend name="include/motion/_Actuate/TransformOptions.h"/>
+   <depend name="include/motion/actuators/GenericActuator.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/actuators/SimpleActuator.h"/>
+   <depend name="include/motion/actuators/TransformActuator.h"/>
+  </file>
+  <file name="src/motion/_Actuate/EffectsOptions.cpp">
+   <depend name="include/flash/display/DisplayObject.h"/>
+   <depend name="include/flash/display/IBitmapDrawable.h"/>
+   <depend name="include/flash/events/EventDispatcher.h"/>
+   <depend name="include/flash/events/IEventDispatcher.h"/>
+   <depend name="include/motion/Actuate.h"/>
+   <depend name="include/motion/_Actuate/EffectsOptions.h"/>
+   <depend name="include/motion/actuators/FilterActuator.h"/>
+   <depend name="include/motion/actuators/GenericActuator.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/actuators/SimpleActuator.h"/>
+  </file>
+  <file name="src/motion/Actuate.cpp">
+   <depend name="include/IMap.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/flash/display/DisplayObject.h"/>
+   <depend name="include/flash/display/IBitmapDrawable.h"/>
+   <depend name="include/flash/events/EventDispatcher.h"/>
+   <depend name="include/flash/events/IEventDispatcher.h"/>
+   <depend name="include/haxe/ds/IntMap.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/motion/Actuate.h"/>
+   <depend name="include/motion/_Actuate/EffectsOptions.h"/>
+   <depend name="include/motion/_Actuate/TransformOptions.h"/>
+   <depend name="include/motion/_Actuate/TweenTimer.h"/>
+   <depend name="include/motion/actuators/GenericActuator.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/actuators/MethodActuator.h"/>
+   <depend name="include/motion/actuators/MotionPathActuator.h"/>
+   <depend name="include/motion/actuators/SimpleActuator.h"/>
+   <depend name="include/motion/easing/Expo.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/easing/ExpoEaseOut.cpp">
+   <depend name="include/motion/easing/ExpoEaseOut.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/easing/IEasing.cpp">
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/easing/Expo.cpp">
+   <depend name="include/motion/easing/Expo.h"/>
+   <depend name="include/motion/easing/ExpoEaseIn.h"/>
+   <depend name="include/motion/easing/ExpoEaseInOut.h"/>
+   <depend name="include/motion/easing/ExpoEaseOut.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/actuators/SimpleActuator.cpp">
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/flash/Lib.h"/>
+   <depend name="include/flash/display/DisplayObject.h"/>
+   <depend name="include/flash/display/DisplayObjectContainer.h"/>
+   <depend name="include/flash/display/IBitmapDrawable.h"/>
+   <depend name="include/flash/display/InteractiveObject.h"/>
+   <depend name="include/flash/display/MovieClip.h"/>
+   <depend name="include/flash/display/Sprite.h"/>
+   <depend name="include/flash/display/Stage.h"/>
+   <depend name="include/flash/events/Event.h"/>
+   <depend name="include/flash/events/EventDispatcher.h"/>
+   <depend name="include/flash/events/IEventDispatcher.h"/>
+   <depend name="include/motion/actuators/GenericActuator.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/actuators/PropertyDetails.h"/>
+   <depend name="include/motion/actuators/SimpleActuator.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/actuators/GenericActuator.cpp">
+   <depend name="include/Reflect.h"/>
+   <depend name="include/motion/Actuate.h"/>
+   <depend name="include/motion/actuators/GenericActuator.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
+  <file name="src/motion/actuators/IGenericActuator.cpp">
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
+  </file>
   <file name="src/haxe/io/Error.cpp">
    <depend name="include/haxe/io/Error.h"/>
   </file>
@@ -108,6 +304,11 @@
   <file name="src/haxe/ds/StringMap.cpp">
    <depend name="include/IMap.h"/>
    <depend name="include/haxe/ds/StringMap.h"/>
+  </file>
+  <file name="src/haxe/ds/ObjectMap.cpp">
+   <depend name="include/IMap.h"/>
+   <depend name="include/haxe/ds/IntMap.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
   </file>
   <file name="src/haxe/ds/IntMap.cpp">
    <depend name="include/IMap.h"/>
@@ -161,6 +362,9 @@
   </file>
   <file name="src/flash/text/TextLineMetrics.cpp">
    <depend name="include/flash/text/TextLineMetrics.h"/>
+  </file>
+  <file name="src/flash/text/TextFormatAlign.cpp">
+   <depend name="include/flash/text/TextFormatAlign.h"/>
   </file>
   <file name="src/flash/text/TextFormat.cpp">
    <depend name="include/flash/text/TextFormat.h"/>
@@ -310,6 +514,10 @@
   <file name="src/flash/geom/ColorTransform.cpp">
    <depend name="include/Std.h"/>
    <depend name="include/flash/geom/ColorTransform.h"/>
+  </file>
+  <file name="src/flash/filters/DropShadowFilter.cpp">
+   <depend name="include/flash/filters/BitmapFilter.h"/>
+   <depend name="include/flash/filters/DropShadowFilter.h"/>
   </file>
   <file name="src/flash/filters/BitmapFilter.cpp">
    <depend name="include/flash/filters/BitmapFilter.h"/>
@@ -686,11 +894,41 @@
    <depend name="include/flash/display/PixelSnapping.h"/>
    <depend name="include/flash/display/Shape.h"/>
    <depend name="include/flash/display/Sprite.h"/>
+   <depend name="include/flash/events/Event.h"/>
    <depend name="include/flash/events/EventDispatcher.h"/>
    <depend name="include/flash/events/IEventDispatcher.h"/>
+   <depend name="include/flash/events/MouseEvent.h"/>
+   <depend name="include/flash/filters/BitmapFilter.h"/>
+   <depend name="include/flash/filters/DropShadowFilter.h"/>
    <depend name="include/flash/text/TextField.h"/>
    <depend name="include/flash/text/TextFieldAutoSize.h"/>
    <depend name="include/flash/text/TextFormat.h"/>
+   <depend name="include/flash/text/TextFormatAlign.h"/>
+   <depend name="include/motion/Actuate.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+  </file>
+  <file name="src/com/mahjong/view/MapView.cpp">
+   <depend name="include/com/gamekit/core/IDestroyable.h"/>
+   <depend name="include/com/gamekit/core/IJsonParsable.h"/>
+   <depend name="include/com/gamekit/mvc/model/Model.h"/>
+   <depend name="include/com/gamekit/mvc/view/View.h"/>
+   <depend name="include/com/mahjong/map/MapTile.h"/>
+   <depend name="include/com/mahjong/model/MapModel.h"/>
+   <depend name="include/com/mahjong/model/ModModel.h"/>
+   <depend name="include/com/mahjong/model/TileModel.h"/>
+   <depend name="include/com/mahjong/view/MapView.h"/>
+   <depend name="include/com/mahjong/view/TileView.h"/>
+   <depend name="include/flash/display/DisplayObject.h"/>
+   <depend name="include/flash/display/DisplayObjectContainer.h"/>
+   <depend name="include/flash/display/IBitmapDrawable.h"/>
+   <depend name="include/flash/display/InteractiveObject.h"/>
+   <depend name="include/flash/display/Sprite.h"/>
+   <depend name="include/flash/events/EventDispatcher.h"/>
+   <depend name="include/flash/events/IEventDispatcher.h"/>
+   <depend name="include/motion/Actuate.h"/>
+   <depend name="include/motion/actuators/IGenericActuator.h"/>
+   <depend name="include/motion/easing/Cubic.h"/>
+   <depend name="include/motion/easing/IEasing.h"/>
   </file>
   <file name="src/com/mahjong/model/TileModel.cpp">
    <depend name="include/com/gamekit/core/IDestroyable.h"/>
@@ -701,21 +939,51 @@
    <depend name="include/flash/events/EventDispatcher.h"/>
    <depend name="include/flash/events/IEventDispatcher.h"/>
   </file>
+  <file name="src/com/mahjong/model/ModModel.cpp">
+   <depend name="include/com/gamekit/core/IDestroyable.h"/>
+   <depend name="include/com/gamekit/core/IJsonParsable.h"/>
+   <depend name="include/com/gamekit/mvc/model/Model.h"/>
+   <depend name="include/com/mahjong/model/ModModel.h"/>
+   <depend name="include/com/mahjong/model/TileModel.h"/>
+   <depend name="include/flash/events/EventDispatcher.h"/>
+   <depend name="include/flash/events/IEventDispatcher.h"/>
+  </file>
+  <file name="src/com/mahjong/model/MapModel.cpp">
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/com/gamekit/core/IDestroyable.h"/>
+   <depend name="include/com/gamekit/core/IJsonParsable.h"/>
+   <depend name="include/com/gamekit/mvc/model/Model.h"/>
+   <depend name="include/com/mahjong/map/MapTile.h"/>
+   <depend name="include/com/mahjong/model/MapModel.h"/>
+   <depend name="include/flash/events/EventDispatcher.h"/>
+   <depend name="include/flash/events/IEventDispatcher.h"/>
+  </file>
+  <file name="src/com/mahjong/map/MapTile.cpp">
+   <depend name="include/com/mahjong/map/MapTile.h"/>
+  </file>
   <file name="src/com/mahjong/Mahjong.cpp">
+   <depend name="include/StringTools.h"/>
    <depend name="include/com/gamekit/core/IDestroyable.h"/>
    <depend name="include/com/gamekit/core/IJsonParsable.h"/>
    <depend name="include/com/gamekit/mvc/model/Model.h"/>
    <depend name="include/com/gamekit/mvc/view/View.h"/>
    <depend name="include/com/mahjong/Mahjong.h"/>
+   <depend name="include/com/mahjong/model/MapModel.h"/>
+   <depend name="include/com/mahjong/model/ModModel.h"/>
    <depend name="include/com/mahjong/model/TileModel.h"/>
-   <depend name="include/com/mahjong/view/TileView.h"/>
+   <depend name="include/com/mahjong/view/MapView.h"/>
    <depend name="include/flash/display/DisplayObject.h"/>
    <depend name="include/flash/display/DisplayObjectContainer.h"/>
    <depend name="include/flash/display/IBitmapDrawable.h"/>
    <depend name="include/flash/display/InteractiveObject.h"/>
    <depend name="include/flash/display/Sprite.h"/>
+   <depend name="include/flash/events/Event.h"/>
    <depend name="include/flash/events/EventDispatcher.h"/>
    <depend name="include/flash/events/IEventDispatcher.h"/>
+   <depend name="include/flash/net/URLLoader.h"/>
+   <depend name="include/flash/net/URLRequest.h"/>
+   <depend name="include/haxe/Log.h"/>
    <depend name="include/tjson/TJSON.h"/>
   </file>
   <file name="src/com/gamekit/text/LatexParser.cpp">

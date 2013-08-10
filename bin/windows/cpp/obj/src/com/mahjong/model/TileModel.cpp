@@ -60,10 +60,10 @@ Dynamic TileModel_obj::__Create(hx::DynamicArray inArgs)
 	return result;}
 
 ::String TileModel_obj::set_context( ::String value){
-	HX_STACK_PUSH("TileModel::set_context","com/mahjong/model/TileModel.hx",126);
+	HX_STACK_PUSH("TileModel::set_context","com/mahjong/model/TileModel.hx",125);
 	HX_STACK_THIS(this);
 	HX_STACK_ARG(value,"value");
-	HX_STACK_LINE(126)
+	HX_STACK_LINE(125)
 	return this->_context = value;
 }
 
@@ -71,9 +71,9 @@ Dynamic TileModel_obj::__Create(hx::DynamicArray inArgs)
 HX_DEFINE_DYNAMIC_FUNC1(TileModel_obj,set_context,return )
 
 ::String TileModel_obj::get_context( ){
-	HX_STACK_PUSH("TileModel::get_context","com/mahjong/model/TileModel.hx",121);
+	HX_STACK_PUSH("TileModel::get_context","com/mahjong/model/TileModel.hx",120);
 	HX_STACK_THIS(this);
-	HX_STACK_LINE(121)
+	HX_STACK_LINE(120)
 	return this->_context;
 }
 
@@ -81,10 +81,10 @@ HX_DEFINE_DYNAMIC_FUNC1(TileModel_obj,set_context,return )
 HX_DEFINE_DYNAMIC_FUNC0(TileModel_obj,get_context,return )
 
 ::String TileModel_obj::set_information( ::String value){
-	HX_STACK_PUSH("TileModel::set_information","com/mahjong/model/TileModel.hx",111);
+	HX_STACK_PUSH("TileModel::set_information","com/mahjong/model/TileModel.hx",110);
 	HX_STACK_THIS(this);
 	HX_STACK_ARG(value,"value");
-	HX_STACK_LINE(111)
+	HX_STACK_LINE(110)
 	return this->_information = value;
 }
 
@@ -92,9 +92,9 @@ HX_DEFINE_DYNAMIC_FUNC0(TileModel_obj,get_context,return )
 HX_DEFINE_DYNAMIC_FUNC1(TileModel_obj,set_information,return )
 
 ::String TileModel_obj::get_information( ){
-	HX_STACK_PUSH("TileModel::get_information","com/mahjong/model/TileModel.hx",106);
+	HX_STACK_PUSH("TileModel::get_information","com/mahjong/model/TileModel.hx",105);
 	HX_STACK_THIS(this);
-	HX_STACK_LINE(106)
+	HX_STACK_LINE(105)
 	return this->_information;
 }
 
@@ -102,10 +102,10 @@ HX_DEFINE_DYNAMIC_FUNC1(TileModel_obj,set_information,return )
 HX_DEFINE_DYNAMIC_FUNC0(TileModel_obj,get_information,return )
 
 bool TileModel_obj::set_rotated( bool value){
-	HX_STACK_PUSH("TileModel::set_rotated","com/mahjong/model/TileModel.hx",95);
+	HX_STACK_PUSH("TileModel::set_rotated","com/mahjong/model/TileModel.hx",94);
 	HX_STACK_THIS(this);
 	HX_STACK_ARG(value,"value");
-	HX_STACK_LINE(95)
+	HX_STACK_LINE(94)
 	return this->_rotated = value;
 }
 
@@ -113,9 +113,9 @@ bool TileModel_obj::set_rotated( bool value){
 HX_DEFINE_DYNAMIC_FUNC1(TileModel_obj,set_rotated,return )
 
 bool TileModel_obj::get_rotated( ){
-	HX_STACK_PUSH("TileModel::get_rotated","com/mahjong/model/TileModel.hx",90);
+	HX_STACK_PUSH("TileModel::get_rotated","com/mahjong/model/TileModel.hx",89);
 	HX_STACK_THIS(this);
-	HX_STACK_LINE(90)
+	HX_STACK_LINE(89)
 	return this->_rotated;
 }
 
@@ -123,10 +123,10 @@ bool TileModel_obj::get_rotated( ){
 HX_DEFINE_DYNAMIC_FUNC0(TileModel_obj,get_rotated,return )
 
 ::String TileModel_obj::set_value( ::String value){
-	HX_STACK_PUSH("TileModel::set_value","com/mahjong/model/TileModel.hx",80);
+	HX_STACK_PUSH("TileModel::set_value","com/mahjong/model/TileModel.hx",79);
 	HX_STACK_THIS(this);
 	HX_STACK_ARG(value,"value");
-	HX_STACK_LINE(80)
+	HX_STACK_LINE(79)
 	return this->_value = value;
 }
 
@@ -134,9 +134,9 @@ HX_DEFINE_DYNAMIC_FUNC0(TileModel_obj,get_rotated,return )
 HX_DEFINE_DYNAMIC_FUNC1(TileModel_obj,set_value,return )
 
 ::String TileModel_obj::get_value( ){
-	HX_STACK_PUSH("TileModel::get_value","com/mahjong/model/TileModel.hx",75);
+	HX_STACK_PUSH("TileModel::get_value","com/mahjong/model/TileModel.hx",74);
 	HX_STACK_THIS(this);
-	HX_STACK_LINE(75)
+	HX_STACK_LINE(74)
 	return this->_value;
 }
 
@@ -144,10 +144,10 @@ HX_DEFINE_DYNAMIC_FUNC1(TileModel_obj,set_value,return )
 HX_DEFINE_DYNAMIC_FUNC0(TileModel_obj,get_value,return )
 
 ::String TileModel_obj::set_type( ::String value){
-	HX_STACK_PUSH("TileModel::set_type","com/mahjong/model/TileModel.hx",64);
+	HX_STACK_PUSH("TileModel::set_type","com/mahjong/model/TileModel.hx",63);
 	HX_STACK_THIS(this);
 	HX_STACK_ARG(value,"value");
-	HX_STACK_LINE(64)
+	HX_STACK_LINE(63)
 	return this->_type = value;
 }
 
@@ -155,9 +155,9 @@ HX_DEFINE_DYNAMIC_FUNC0(TileModel_obj,get_value,return )
 HX_DEFINE_DYNAMIC_FUNC1(TileModel_obj,set_type,return )
 
 ::String TileModel_obj::get_type( ){
-	HX_STACK_PUSH("TileModel::get_type","com/mahjong/model/TileModel.hx",59);
+	HX_STACK_PUSH("TileModel::get_type","com/mahjong/model/TileModel.hx",58);
 	HX_STACK_THIS(this);
-	HX_STACK_LINE(59)
+	HX_STACK_LINE(58)
 	return this->_type;
 }
 
@@ -181,18 +181,18 @@ Void TileModel_obj::_parseJson( Dynamic data){
 			HX_STACK_LINE(37)
 			this->_value = ::com::gamekit::text::LatexParser_obj::toHtml(data->__Field(HX_CSTRING("value"),true));
 		}
-		HX_STACK_LINE(42)
-		this->_rotated = (data->__Field(HX_CSTRING("rotated"),true) == true);
-		HX_STACK_LINE(44)
+		HX_STACK_LINE(41)
+		this->_rotated = data->__Field(HX_CSTRING("rotate"),true);
+		HX_STACK_LINE(43)
 		if (((data->__Field(HX_CSTRING("information"),true) != null()))){
-			HX_STACK_LINE(45)
+			HX_STACK_LINE(44)
 			this->_information = data->__Field(HX_CSTRING("information"),true);
 		}
 		else{
-			HX_STACK_LINE(49)
+			HX_STACK_LINE(48)
 			this->_information = HX_CSTRING("");
 		}
-		HX_STACK_LINE(53)
+		HX_STACK_LINE(52)
 		this->_context = data->__Field(HX_CSTRING("context"),true);
 	}
 return null();

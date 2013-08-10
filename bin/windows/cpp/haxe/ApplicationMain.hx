@@ -39,10 +39,10 @@ class ApplicationMain
 		wx.App.boot(function()
 		{
 			
-			frame = wx.Frame.create(null, null, "Mahjong", null, { width: 800, height: 480 });
+			frame = wx.Frame.create(null, null, "Mahjong", null, { width: 1024, height: 768 });
 			
 			#if openfl
-			var stage = wx.NMEStage.create(frame, null, null, { width: 800, height: 480 });
+			var stage = wx.NMEStage.create(frame, null, null, { width: 1024, height: 768 });
 			#end
 
 			var hasMain = false;
@@ -87,7 +87,7 @@ class ApplicationMain
 		
 		flash.Lib.create(function()
 			{ 
-				//if ((800 == 0 && 480 == 0) || false)
+				//if ((1024 == 0 && 768 == 0) || false)
 				//{
 					flash.Lib.current.stage.align = flash.display.StageAlign.TOP_LEFT;
 					flash.Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
@@ -96,10 +96,10 @@ class ApplicationMain
 				
 				#if mobile
 				
-				if (800 != 0 && 480 != 0) {
+				if (1024 != 0 && 768 != 0) {
 					
-					forceWidth = 800;
-					forceHeight = 480;
+					forceWidth = 1024;
+					forceHeight = 768;
 					
 					container = new flash.display.Sprite();
 					barA = new flash.display.Sprite();
@@ -142,7 +142,7 @@ class ApplicationMain
 					#end
 				}
 			},
-			800, 480, 
+			1024, 768, 
 			60, 
 			16777215,
 			(true ? flash.Lib.HARDWARE : 0) |
@@ -275,12 +275,12 @@ class ScaledStage extends flash.display.Stage {
 	
 	private override function get_stageHeight():Int 
    {
-      return 480;
+      return 768;
    }
 	
    private override function get_stageWidth():Int 
    {
-      return 800;
+      return 1024;
    }
 	
 }

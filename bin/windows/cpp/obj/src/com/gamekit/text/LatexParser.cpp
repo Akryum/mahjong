@@ -53,32 +53,32 @@ int LatexParser_obj::baseFontSize;
 	HX_STACK_LINE(15)
 	::EReg reg;		HX_STACK_VAR(reg,"reg");
 	HX_STACK_LINE(18)
+	latex = ::StringTools_obj::replace(latex,HX_CSTRING("\\n"),HX_CSTRING("<br/>"));
+	HX_STACK_LINE(21)
 	reg = ::EReg_obj::__new(HX_CSTRING("\\\\size\\(([0-9]+)\\)\\{(.*)\\}"),HX_CSTRING("i"));
-	HX_STACK_LINE(19)
+	HX_STACK_LINE(22)
 	reg->match(latex);
-	HX_STACK_LINE(20)
-	latex = reg->map(latex,::com::gamekit::text::LatexParser_obj::_replaceSize_dyn());
 	HX_STACK_LINE(23)
+	latex = reg->map(latex,::com::gamekit::text::LatexParser_obj::_replaceSize_dyn());
+	HX_STACK_LINE(26)
 	reg = ::EReg_obj::__new(HX_CSTRING("\\\\color\\((#[0-9a-f]{6}|[a-z]+)\\)\\{(.*)\\}"),HX_CSTRING("i"));
-	HX_STACK_LINE(24)
+	HX_STACK_LINE(27)
 	reg->match(latex);
-	HX_STACK_LINE(25)
-	latex = reg->map(latex,::com::gamekit::text::LatexParser_obj::_replaceColor_dyn());
 	HX_STACK_LINE(28)
+	latex = reg->map(latex,::com::gamekit::text::LatexParser_obj::_replaceColor_dyn());
+	HX_STACK_LINE(31)
 	reg = ::EReg_obj::__new(HX_CSTRING("_\\((#[0-9a-f]{6}|[a-z]+)\\)\\{(.*)\\}"),HX_CSTRING("i"));
-	HX_STACK_LINE(29)
+	HX_STACK_LINE(32)
 	reg->match(latex);
-	HX_STACK_LINE(30)
-	latex = reg->map(latex,::com::gamekit::text::LatexParser_obj::_replaceSub_dyn());
 	HX_STACK_LINE(33)
+	latex = reg->map(latex,::com::gamekit::text::LatexParser_obj::_replaceSub_dyn());
+	HX_STACK_LINE(36)
 	reg = ::EReg_obj::__new(HX_CSTRING("\\^\\((#[0-9a-f]{6}|[a-z]+)\\)\\{(.*)\\}"),HX_CSTRING("i"));
-	HX_STACK_LINE(34)
+	HX_STACK_LINE(37)
 	reg->match(latex);
-	HX_STACK_LINE(35)
-	latex = reg->map(latex,::com::gamekit::text::LatexParser_obj::_replaceSup_dyn());
 	HX_STACK_LINE(38)
-	latex = ::StringTools_obj::replace(latex,HX_CSTRING("\n"),HX_CSTRING("<br/>"));
-	HX_STACK_LINE(40)
+	latex = reg->map(latex,::com::gamekit::text::LatexParser_obj::_replaceSup_dyn());
+	HX_STACK_LINE(41)
 	return latex;
 }
 
@@ -86,9 +86,9 @@ int LatexParser_obj::baseFontSize;
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(LatexParser_obj,toHtml,return )
 
 ::String LatexParser_obj::_replaceSize( ::EReg reg){
-	HX_STACK_PUSH("LatexParser::_replaceSize","com/gamekit/text/LatexParser.hx",44);
+	HX_STACK_PUSH("LatexParser::_replaceSize","com/gamekit/text/LatexParser.hx",45);
 	HX_STACK_ARG(reg,"reg");
-	HX_STACK_LINE(44)
+	HX_STACK_LINE(45)
 	return ((((HX_CSTRING("<font size=\"") + ::Math_obj::round((Float((::com::gamekit::text::LatexParser_obj::baseFontSize * ::Std_obj::parseInt(reg->matched((int)1)))) / Float((int)100)))) + HX_CSTRING("\">")) + reg->matched((int)2)) + HX_CSTRING("</font>"));
 }
 
@@ -96,25 +96,25 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC1(LatexParser_obj,toHtml,return )
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(LatexParser_obj,_replaceSize,return )
 
 ::String LatexParser_obj::_replaceColor( ::EReg reg){
-	HX_STACK_PUSH("LatexParser::_replaceColor","com/gamekit/text/LatexParser.hx",49);
+	HX_STACK_PUSH("LatexParser::_replaceColor","com/gamekit/text/LatexParser.hx",50);
 	HX_STACK_ARG(reg,"reg");
-	HX_STACK_LINE(50)
+	HX_STACK_LINE(51)
 	::String color = reg->matched((int)1).toLowerCase();		HX_STACK_VAR(color,"color");
-	HX_STACK_LINE(52)
+	HX_STACK_LINE(53)
 	if (((bool((::com::gamekit::text::LatexParser_obj::standardColors != null())) && bool(::com::gamekit::text::LatexParser_obj::standardColors->exists(color))))){
-		HX_STACK_LINE(53)
+		HX_STACK_LINE(54)
 		color = ::com::gamekit::text::LatexParser_obj::standardColors->get(color);
 	}
 	else{
-		HX_STACK_LINE(58)
-		::EReg reg2 = ::EReg_obj::__new(HX_CSTRING("#[0-9a-f]{6}"),HX_CSTRING("i"));		HX_STACK_VAR(reg2,"reg2");
 		HX_STACK_LINE(59)
+		::EReg reg2 = ::EReg_obj::__new(HX_CSTRING("#[0-9a-f]{6}"),HX_CSTRING("i"));		HX_STACK_VAR(reg2,"reg2");
+		HX_STACK_LINE(60)
 		if ((!(reg2->match(color)))){
-			HX_STACK_LINE(60)
+			HX_STACK_LINE(61)
 			return reg->matched((int)2);
 		}
 	}
-	HX_STACK_LINE(65)
+	HX_STACK_LINE(66)
 	return ((((HX_CSTRING("<font color=\"") + color) + HX_CSTRING("\">")) + reg->matched((int)2)) + HX_CSTRING("</font>"));
 }
 
@@ -122,9 +122,9 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC1(LatexParser_obj,_replaceSize,return )
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(LatexParser_obj,_replaceColor,return )
 
 ::String LatexParser_obj::_replaceSub( ::EReg reg){
-	HX_STACK_PUSH("LatexParser::_replaceSub","com/gamekit/text/LatexParser.hx",69);
+	HX_STACK_PUSH("LatexParser::_replaceSub","com/gamekit/text/LatexParser.hx",70);
 	HX_STACK_ARG(reg,"reg");
-	HX_STACK_LINE(69)
+	HX_STACK_LINE(70)
 	return reg->matched((int)2);
 }
 
@@ -132,9 +132,9 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC1(LatexParser_obj,_replaceColor,return )
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(LatexParser_obj,_replaceSub,return )
 
 ::String LatexParser_obj::_replaceSup( ::EReg reg){
-	HX_STACK_PUSH("LatexParser::_replaceSup","com/gamekit/text/LatexParser.hx",74);
+	HX_STACK_PUSH("LatexParser::_replaceSup","com/gamekit/text/LatexParser.hx",75);
 	HX_STACK_ARG(reg,"reg");
-	HX_STACK_LINE(74)
+	HX_STACK_LINE(75)
 	return reg->matched((int)2);
 }
 
